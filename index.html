@@ -1,712 +1,2058 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-    	<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-134780629-2"></script>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bicyclize — Urban Mobility Consultancy</title>
+<meta name="description" content="Budapest-based urban mobility consultancy. Traffic calming, cycling infrastructure, GIS analytics, school streets, public consultation — from evidence to delivery.">
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        forest: { 400:'#4ade80', 500:'#22c55e', 600:'#16a34a' },
+        dk: { 950:'#060F09', 900:'#0A1F14', 800:'#0F2D1F', 700:'#163A28' }
+      },
+      fontFamily: { sans: ['Plus Jakarta Sans','Inter','system-ui','sans-serif'] }
+    }}
+  }
+</script>
+<style>
+  [x-cloak]{display:none!important}
+  html{scroll-behavior:smooth}
+  body{font-family:'Plus Jakarta Sans',Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .gh{background:linear-gradient(150deg,#060F09 0%,#0A2E1A 60%,#0F3322 100%)}
+  .gt{background:linear-gradient(135deg,#4ade80,#22c55e,#86efac);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .glass{background:rgba(255,255,255,.07);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12)}
+  .sl{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#22c55e;display:block;margin-bottom:1rem}
+  .bg{display:inline-flex;align-items:center;gap:.5rem;background:#22c55e;color:#fff;font-weight:700;padding:.8rem 2rem;border-radius:9999px;transition:all .3s;text-decoration:none}
+  .bg:hover{background:#16a34a;transform:translateY(-2px);box-shadow:0 12px 28px rgba(34,197,94,.35)}
+  .bo{display:inline-flex;align-items:center;gap:.5rem;border:2px solid rgba(255,255,255,.3);color:#fff;font-weight:600;padding:.75rem 1.8rem;border-radius:9999px;transition:all .3s;text-decoration:none}
+  .bo:hover{border-color:#22c55e;color:#22c55e}
+  .ch{transition:transform .3s,box-shadow .3s}
+  .ch:hover{transform:translateY(-5px);box-shadow:0 20px 40px rgba(0,0,0,.1)}
+  .iz{overflow:hidden}
+  .iz img{transition:transform .5s;width:100%;height:100%;object-fit:cover}
+  .iz:hover img{transform:scale(1.05)}
+  @keyframes fu{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  .a1{animation:fu .8s ease both}.a2{animation:fu .8s .15s ease both}.a3{animation:fu .8s .3s ease both}
+  input,textarea{transition:border-color .3s,box-shadow .3s;width:100%;padding:.75rem 1rem;border:1.5px solid #e5e7eb;border-radius:.75rem;font-family:inherit;font-size:.95rem;background:#fff}
+  input:focus,textarea:focus{outline:none;border-color:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.12)}
+  #map{z-index:1}
+  .navl{position:relative;transition:color .3s}
+  .navl::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:2px;background:#22c55e;transition:width .3s}
+  .navl:hover::after{width:100%}
+  .step-n{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.9rem;flex-shrink:0;box-shadow:0 8px 20px rgba(34,197,94,.3)}
+  .bdg{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .7rem;border-radius:9999px;display:inline-block}
+  .done{background:#dcfce7;color:#166534}
+  .act{background:#fef3c7;color:#92400e}
+  .prog{background:#dbeafe;color:#1e40af}
+</style>
+</head>
+<body x-data="{
+  lang:'en', mo:false,
+  D: {
+    en: {
+      nav:['Services','Our Approach','Projects','Tools','Team','Contact'],
+      badge:'Urban Mobility Consultancy · Budapest',
+      h1a:'Streets built', h1b:'for people.',
+      sub:'From first data point to delivered infrastructure — cycling networks, traffic calming, school streets, GIS analytics, and public consultation.',
+      c1:'View Projects', c2:'Talk to us',
+      sl1:'What We Do', sh1:'Full-spectrum urban mobility.',
+      ss1:'We combine rigorous analysis, community engagement, and technical design to deliver streets that genuinely work for everyone.',
+      svcs:[
+        {e:'🚧',t:'Traffic Calming',d:'Evidence-based schemes that reduce speed and volume, improve safety, and create liveable streets — from temporary pilots to permanent delivery.'},
+        {e:'🚲',t:'Cycling Infrastructure',d:'Network planning, protected lane design, junction layouts, safety assessment, and cycling investment economics.'},
+        {e:'🗺️',t:'GIS Analytics',d:'Network analysis, geographic weighted regression, catchment area modelling, cycling potential maps, and spatial data visualisation.'},
+        {e:'🏫',t:'School Streets',d:'Safe street programmes: traffic restrictions, cycling training, air quality measurement, community workshops, and design options.'},
+        {e:'👥',t:'Public Consultation',d:'Workshops, surveys, digital platforms, community planning events. Co-design that is meaningful, not performative.'},
+        {e:'📋',t:'Transport Strategy',d:'Integrated mobility strategies for cities, districts, institutions. Evidence-based, aligned with European standards.'}
+      ],
+      sl2:'Our Approach', sh2:'From evidence to delivery.',
+      ss2:'Every project follows the same principle: understand first, co-design, build, then measure the change.',
+      steps:[
+        {n:'01',t:'Evidence Base',d:'Traffic counts, GIS analysis, speed surveys, sensor data. We start with facts, not assumptions.'},
+        {n:'02',t:'Community Consultation',d:'Workshops, surveys, digital tools, stakeholder sessions. Consultation that creates genuine ownership.'},
+        {n:'03',t:'Conceptual Design',d:'Multiple options developed and tested. Clear visualisations that anyone — not just planners — can understand.'},
+        {n:'04',t:'Technical Plans',d:'Construction-ready drawings, detailed specs, permit coordination, authority liaison.'},
+        {n:'05',t:'Implementation',d:'On-site coordination, element placement, contractor supervision, community communication.'},
+        {n:'06',t:'Monitoring',d:'Before-and-after data: volumes, speeds, cycling counts, air quality. Proof of real, lasting change.'}
+      ],
+      sl3:'Case Studies', ph3:'Projects in Budapest and beyond.',
+      projects:[
+        {img:'images/nagykorut-design.jpg',s:'done',st:'Award-winning',tag:'Cycling Infrastructure',t:'Budapest Nagykörút',d:'Award-winning proposal for the Grand Boulevard: 2 m protected cycling lanes on both sides, 78 new trees, pedestrian priority at intersections. Budapest\'s most ambitious cycling project since 1994.',url:'https://varosmobilitas.hu/nagykorut'},
+        {img:'images/school-street.jpg',s:'act',st:'Active',tag:'School Streets',t:'Batthyány School Street',d:'Full school street programme: traffic restriction during school hours, cycling training for 150+ pupils, air quality and noise measurement, three design options under community review.',url:'https://varosmobilitas.hu/iskolautca'},
+        {img:'images/traffic-calming.jpg',s:'done',st:'Completed',tag:'Traffic Calming',t:'Magdolna Quarter',d:'Comprehensive traffic calming for a historic Budapest neighbourhood: traffic counting, community planning, construction-ready drawings, and full project delivery.',url:'https://varosmobilitas.hu/magdolnanegyed'},
+        {img:'images/gis-analytics.jpg',s:'done',st:'Delivered',tag:'GIS & Strategy',t:'Budapest Transport Strategy',d:'GIS-led analysis for the city-wide transport strategy: cycling potential mapping, network gap analysis, and modal shift modelling for the Hungarian capital.',url:'https://varosmobilitas.hu/budapest-kzlekedsi-stratgia'},
+        {img:'images/public-consultation.jpg',s:'prog',st:'In progress',tag:'Traffic Calming',t:'Víziváros (Water City)',d:'Traffic calming for the historic Water City district: full community consultation complete, traffic counts done, construction plans ready and awaiting implementation.',url:'https://varosmobilitas.hu/vizivaros'},
+        {img:'images/traffic-counter.jpg',s:'done',st:'Delivered',tag:'Data & Research',t:'Józsefváros Traffic Survey',d:'Comprehensive automated and manual traffic measurement for the 8th district: pedestrian, cyclist, and vehicle counts with pattern analysis to support planning.',url:'https://varosmobilitas.hu/jozsef-forgalommeres'}
+      ],
+      sl4:'Tools & Partners', sh4:'World-class tools, local expertise.',
+      ss4:'We bring leading international platforms to Hungarian cities and public institutions.',
+      vtitle:'Via Remix Streets — Certified Partner',
+      vdesc:'We partner with Via\'s Remix Streets, the world\'s leading street design platform — used by cities from New York to Amsterdam. We bring evidence-based scenario modelling, multimodal simulation, and community engagement tools to Hungarian urban planning.',
+      vfeats:['Interactive street design and scenario modelling','Multimodal traffic simulation and analysis','Community-facing visualisations for consultation','Integration with GIS and open transport data'],
+      vlink:'https://ridewithvia.com/solutions/remix/streets',
+      gtitle:'GIS & Spatial Analytics',
+      gdesc:'Our GIS capability goes beyond standard mapping. We model cycling potential, analyse network gaps, and build the evidence base that justifies infrastructure investment.',
+      gcaps:['Network connectivity analysis','Geographic Weighted Regression (GWR)','Cycling potential and demand modelling','Catchment area and accessibility mapping','Traffic flow modelling and simulation','Custom interactive web maps'],
+      stats:[{n:'10+',l:'Projects delivered'},{n:'6',l:'Budapest districts'},{n:'5+',l:'Years experience'},{n:'EU',l:'Funded projects'}],
+      sl5:'Get in touch', sh5:'Start a conversation.',
+      ss5:'Tell us about your project. We respond within one working day.',
+      flabel:'Name', elabel:'Email', mlabel:'Message', send:'Send message',
+      addr:'Budapest, Andrássy út 79, 1062 Hungary', eml:'info@varosmobilitas.hu',
+      ptitle:'Privacy Policy', ttitle:'Terms of Service', ftag:'Urban Mobility Consultancy'
+    },
+    hu: {
+      nav:['Szolgáltatások','Megközelítés','Projektek','Eszközök','Csapat','Kapcsolat'],
+      badge:'Városi Mobilitás Tanácsadó · Budapest',
+      h1a:'Utcák', h1b:'embereknek.',
+      sub:'Az első adatponttól a kész infrastruktúráig — kerékpárhálózat, forgalomcsillapítás, iskola utcák, térinformatika és közösségi tervezés.',
+      c1:'Projektek', c2:'Írj nekünk',
+      sl1:'Amit csinálunk', sh1:'Teljes körű városi mobilitás.',
+      ss1:'Szigorú elemzést, közösségi részvételt és műszaki tervezést ötvözünk, hogy valóban működő utcákat hozzunk létre mindenki számára.',
+      svcs:[
+        {e:'🚧',t:'Forgalomcsillapítás',d:'Bizonyítékalapú sémák a sebesség és forgalom csökkentésére — ideiglenes pilottól a végleges megvalósításig.'},
+        {e:'🚲',t:'Kerékpáros Infrastruktúra',d:'Hálózattervezés, védett sávok, csomóponti tervek, biztonságértékelés és kerékpározás-gazdasági elemzés.'},
+        {e:'🗺️',t:'GIS Analitika',d:'Hálózatelemzés, geografikusan súlyozott regresszió, vonzáskörzet-modellezés, kerékpározási potenciál térképezés.'},
+        {e:'🏫',t:'Iskola Utcák',d:'Iskolák körüli biztonságos utca programok: forgalomkorlátozás, kerékpáros oktatás, levegőminőség-mérés, workshopok.'},
+        {e:'👥',t:'Közösségi Tervezés',d:'Workshopok, kérdőívek, digitális platformok, közösségi tervezési rendezvények. Valódi co-design.'},
+        {e:'📋',t:'Közlekedési Stratégia',d:'Integrált mobilitási stratégiák városoknak, kerületeknek, intézményeknek. Bizonyítékalapú, európai normák szerint.'}
+      ],
+      sl2:'Megközelítésünk', sh2:'A bizonyítéktól a megvalósításig.',
+      ss2:'Minden projektünk ugyanazt az elvet követi: először megérteni, közösen tervezni, megépíteni, majd mérni a változást.',
+      steps:[
+        {n:'01',t:'Bizonyítékalap',d:'Forgalomszámlálás, GIS-elemzés, sebességmérés és szenzoros monitoring. Adatokkal kezdünk, nem feltételezésekkel.'},
+        {n:'02',t:'Közösségi Egyeztetés',d:'Workshopok, kérdőívek, digitális eszközök, érdekelt feles tárgyalások. Valódi közösségi tulajdonlást teremtő egyeztetés.'},
+        {n:'03',t:'Koncepcióterv',d:'Több lehetőség kidolgozása és tesztelése. Közérthető vizualizációk — nem csak tervezők számára.'},
+        {n:'04',t:'Műszaki Tervek',d:'Kivitelezésre kész tervek, részletes specifikációk, hatósági koordináció.'},
+        {n:'05',t:'Megvalósítás',d:'Helyszíni koordináció, ideiglenes elemek elhelyezése, vállalkozói felügyelet, közösségi kommunikáció.'},
+        {n:'06',t:'Monitoring',d:'Előtte-utána mérések: forgalomvolumen, sebesség, kerékpározás, levegőminőség. A valódi változás bizonyítéka.'}
+      ],
+      sl3:'Esettanulmányok', ph3:'Projektek Budapesten és azon túl.',
+      projects:[
+        {img:'images/nagykorut-design.jpg',s:'done',st:'Díjnyertes',tag:'Kerékpáros Infra',t:'Budapest Nagykörút',d:'Díjnyertes pályaterv a Nagykörút átalakítására: kétoldali 2 m-es védett kerékpársávok, 78 új fa, gyalogos prioritás. Budapest legnagyobb kerékpáros projektje 1994 óta.',url:'https://varosmobilitas.hu/nagykorut'},
+        {img:'images/school-street.jpg',s:'act',st:'Aktív',tag:'Iskola Utca',t:'Batthyány Iskola Utca',d:'Teljes iskola utca program: forgalomkorlátozás, 150+ tanuló kerékpáros tréningje, levegőminőség-mérés, workshopok és három tervvariáns közösségi egyeztetés alatt.',url:'https://varosmobilitas.hu/iskolautca'},
+        {img:'images/traffic-calming.jpg',s:'done',st:'Megvalósult',tag:'Forgalomcsillapítás',t:'Magdolna negyed',d:'Átfogó forgalomcsillapítás egy történelmi budapesti kerületben: forgalomszámlálás, közösségi tervezés, kiviteli tervek és teljes megvalósítás.',url:'https://varosmobilitas.hu/magdolnanegyed'},
+        {img:'images/gis-analytics.jpg',s:'done',st:'Leszállítva',tag:'GIS & Stratégia',t:'Budapest Közlekedési Stratégia',d:'GIS-vezérelt elemzés a fővárosi közlekedési stratégiához: kerékpározási potenciál-térképezés, hálózati réssélemzés és modális váltás modellezés.',url:'https://varosmobilitas.hu/budapest-kzlekedsi-stratgia'},
+        {img:'images/public-consultation.jpg',s:'prog',st:'Folyamatban',tag:'Forgalomcsillapítás',t:'Víziváros',d:'Forgalomcsillapítás egy történelmi budapesti kerületben: a közösségi egyeztetés és forgalomszámlálás kész, a kiviteli tervek megvalósításra várnak.',url:'https://varosmobilitas.hu/vizivaros'},
+        {img:'images/traffic-counter.jpg',s:'done',st:'Leszállítva',tag:'Adatok & Kutatás',t:'Józsefváros Forgalommérés',d:'Átfogó automata és kézi forgalommérési program a VIII. kerületben: gyalogos, kerékpáros és gépjárműforgalom elemzése tervezési döntések megalapozásához.',url:'https://varosmobilitas.hu/jozsef-forgalommeres'}
+      ],
+      sl4:'Technológia & Partnerek', sh4:'Nemzetközi eszközök, helyi szakértelem.',
+      ss4:'Vezető nemzetközi platformokat hozunk a magyar városokba és közintézményekbe.',
+      vtitle:'Via Remix Streets — Tanúsított Partner',
+      vdesc:'A Via Remix Streets platform partnerei vagyunk — ez a világ vezető utcatervező szoftvere, amelyet New Yorktól Amszterdamig használnak. Scenario-modellező és közösségi bevonási eszközöket hozunk a magyar városrendezésbe.',
+      vfeats:['Interaktív utcatervezés és scenario-modellezés','Multimodális forgalomelemzés és szimuláció','Közösségi vizualizációk egyeztetéshez','GIS és nyílt közlekedési adatintegráció'],
+      vlink:'https://ridewithvia.com/solutions/remix/streets',
+      gtitle:'GIS & Térinformatika',
+      gdesc:'Térinformatikai kapacitásunk meghaladja a hagyományos térképezést. Fejlett módszerekkel modellezzük a kerékpározási potenciált és megalapozzuk a beruházási döntéseket.',
+      gcaps:['Hálózati összefüggőség-elemzés','Geografikusan súlyozott regresszió (GWR)','Kerékpározási potenciál és kereslet modellezés','Vonzáskörzet és elérhetőségi térképezés','Forgalomáramlás modellezés és szimuláció','Egyedi interaktív webtérképek'],
+      stats:[{n:'10+',l:'Leszállított projekt'},{n:'6',l:'Budapesti kerület'},{n:'5+',l:'Év tapasztalat'},{n:'EU',l:'Finanszírozott projektek'}],
+      sl5:'Kapcsolat', sh5:'Kezdjünk egy párbeszédet.',
+      ss5:'Mesélje el projektjét. Egy munkanapon belül válaszolunk.',
+      flabel:'Neve', elabel:'E-mail cím', mlabel:'Üzenet', send:'Üzenet küldése',
+      addr:'Budapest, Andrássy út 79, 1062', eml:'info@varosmobilitas.hu',
+      ptitle:'Adatvédelmi Irányelvek', ttitle:'Felhasználási Feltételek', ftag:'Városi Mobilitás Tanácsadó'
+    }
+  },
+  get L(){ return this.D[this.lang] }
+}" class="font-sans text-gray-900 bg-white">
 
-  gtag('config', 'UA-134780629-2');
+<!-- ═══ NAV ═══ -->
+<header class="fixed top-0 inset-x-0 z-50 bg-dk-950/92 backdrop-blur-md border-b border-white/5">
+  <nav class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2 text-white font-bold text-lg no-underline">
+      <span class="text-2xl">🚲</span><span>Bicyclize</span>
+    </a>
+    <div class="hidden lg:flex items-center gap-7">
+      <template x-for="(item,i) in L.nav" :key="i">
+        <a :href="['#services','#approach','#projects','#tools','#team','#contact'][i]" x-text="item"
+           class="navl text-white/70 hover:text-white text-sm font-medium no-underline"></a>
+      </template>
+    </div>
+    <div class="flex items-center gap-3">
+      <button @click="lang=lang==='en'?'hu':'en'"
+        class="text-xs font-bold px-3 py-1.5 rounded-full border border-white/20 text-white/60 hover:border-forest-400 hover:text-forest-400 transition-all cursor-pointer">
+        <span x-text="lang==='en'?'HU':'EN'"></span>
+      </button>
+      <a href="#contact" class="hidden sm:flex bg text-sm py-2 px-5" x-text="L.c2"></a>
+      <button @click="mo=!mo" class="lg:hidden text-white p-1 cursor-pointer">
+        <svg x-show="!mo" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mo" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div x-show="mo" x-cloak x-transition class="lg:hidden bg-dk-900 border-t border-white/10 px-5 py-4 flex flex-col gap-4">
+    <template x-for="(item,i) in L.nav" :key="i">
+      <a :href="['#services','#approach','#projects','#tools','#team','#contact'][i]" x-text="item" @click="mo=false"
+         class="text-white/80 hover:text-forest-400 font-medium no-underline transition-colors"></a>
+    </template>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="gh min-h-screen flex items-center relative overflow-hidden">
+  <div class="absolute inset-0 opacity-30" style="background-image:url('images/hero-cycling.jpg');background-size:cover;background-position:center 40%"></div>
+  <div class="absolute inset-0" style="background:linear-gradient(to right,rgba(6,15,9,.95) 0%,rgba(10,30,20,.8) 55%,rgba(10,30,20,.35) 100%)"></div>
+  <div class="absolute inset-0 opacity-[0.04]" style="background-image:radial-gradient(circle at 2px 2px,#22c55e 1px,transparent 0);background-size:48px 48px"></div>
+  <div class="relative max-w-7xl mx-auto px-5 pt-28 pb-20 grid lg:grid-cols-2 gap-16 items-center w-full">
+    <div>
+      <div class="a1 inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-8">
+        <span class="w-2 h-2 rounded-full bg-forest-500" style="animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite"></span>
+        <span x-text="L.badge" class="text-white/80 text-sm font-medium"></span>
+      </div>
+      <h1 class="a2 text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.08] mb-6">
+        <span x-text="L.h1a"></span><br>
+        <span class="gt" x-text="L.h1b"></span>
+      </h1>
+      <p class="a3 text-white/60 text-lg leading-relaxed mb-10 max-w-lg" x-text="L.sub"></p>
+      <div class="a3 flex flex-wrap gap-4">
+        <a href="#projects" class="bg" x-text="L.c1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+        <a href="#contact" class="bo" x-text="L.c2"></a>
+      </div>
+    </div>
+    <div class="hidden lg:grid grid-cols-2 gap-4">
+      <template x-for="(s,i) in L.stats" :key="i">
+        <div class="glass rounded-2xl p-6 ch">
+          <div class="text-4xl font-extrabold gt mb-1" x-text="s.n"></div>
+          <div class="text-white/60 text-sm font-medium" x-text="s.l"></div>
+        </div>
+      </template>
+    </div>
+  </div>
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/30">
+    <span class="text-xs tracking-widest uppercase">Scroll</span>
+    <svg class="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+  </div>
+</section>
+
+<!-- ═══ SERVICES ═══ -->
+<section id="services" class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-5">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <span class="sl" x-text="L.sl1"></span>
+      <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-5" x-text="L.sh1"></h2>
+      <p class="text-gray-500 text-lg max-w-2xl mx-auto" x-text="L.ss1"></p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+      <template x-for="(s,i) in L.svcs" :key="i">
+        <div class="ch bg-white rounded-2xl p-8 border border-gray-100 shadow-sm" data-aos="fade-up" :data-aos-delay="i*70">
+          <div class="text-4xl mb-5" x-text="s.e"></div>
+          <h3 class="text-lg font-bold text-gray-900 mb-3" x-text="s.t"></h3>
+          <p class="text-gray-500 text-sm leading-relaxed" x-text="s.d"></p>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ APPROACH ═══ -->
+<section id="approach" class="py-24 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-5">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <span class="sl" x-text="L.sl2"></span>
+      <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-5" x-text="L.sh2"></h2>
+      <p class="text-gray-500 text-lg max-w-2xl mx-auto" x-text="L.ss2"></p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <template x-for="(s,i) in L.steps" :key="i">
+        <div class="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm ch" data-aos="fade-up" :data-aos-delay="i*70">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="step-n" x-text="s.n"></div>
+            <h3 class="text-base font-bold text-gray-900 pt-3" x-text="s.t"></h3>
+          </div>
+          <p class="text-gray-500 text-sm leading-relaxed" x-text="s.d"></p>
+        </div>
+      </template>
+    </div>
+    <div class="mt-14 grid md:grid-cols-2 gap-6" data-aos="fade-up">
+      <div class="rounded-2xl iz h-64 shadow-lg"><img src="images/budapest-cycling.jpg" alt="Cycling in Budapest" class="rounded-2xl"></div>
+      <div class="rounded-2xl iz h-64 shadow-lg"><img src="images/public-consultation-2.jpg" alt="Community consultation" class="rounded-2xl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROJECTS ═══ -->
+<section id="projects" class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-5">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <span class="sl" x-text="L.sl3"></span>
+      <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900" x-text="L.ph3"></h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+      <template x-for="(p,i) in L.projects" :key="i">
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm ch overflow-hidden" data-aos="fade-up" :data-aos-delay="i*70">
+          <div class="iz h-52">
+            <img :src="p.img" :alt="p.t" class="rounded-t-2xl">
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="bdg" :class="p.s" x-text="p.st"></span>
+              <span class="text-gray-400 text-xs" x-text="p.tag"></span>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-2" x-text="p.t"></h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4" x-text="p.d"></p>
+            <a :href="p.url" target="_blank" rel="noopener"
+               class="text-forest-600 text-sm font-semibold hover:text-forest-500 transition-colors no-underline flex items-center gap-1">
+              <span x-text="lang==='en'?'Read more':'Tovább'"></span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TOOLS & PARTNERS ═══ -->
+<section id="tools" class="py-24" style="background:linear-gradient(150deg,#060F09 0%,#0A2E1A 60%,#0F3322 100%)">
+  <div class="max-w-7xl mx-auto px-5">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <span class="sl" x-text="L.sl4"></span>
+      <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-5" x-text="L.sh4"></h2>
+      <p class="text-white/60 text-lg max-w-2xl mx-auto" x-text="L.ss4"></p>
+    </div>
+    <div class="grid lg:grid-cols-2 gap-8">
+      <!-- Via Remix -->
+      <div class="glass rounded-2xl p-8 ch" data-aos="fade-right">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-400/30 flex items-center justify-center text-xl">🗺️</div>
+          <h3 class="text-xl font-bold text-white" x-text="L.vtitle"></h3>
+        </div>
+        <p class="text-white/65 leading-relaxed mb-6 text-sm" x-text="L.vdesc"></p>
+        <ul class="space-y-3 mb-7">
+          <template x-for="f in L.vfeats" :key="f">
+            <li class="flex items-start gap-3 text-white/75 text-sm">
+              <svg class="w-4 h-4 text-forest-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              <span x-text="f"></span>
+            </li>
+          </template>
+        </ul>
+        <a :href="L.vlink" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 text-forest-400 font-semibold text-sm hover:text-forest-300 transition-colors no-underline">
+          <span x-text="lang==='en'?'Learn about Remix Streets':'Tudj meg többet'"></span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+      </div>
+      <!-- GIS -->
+      <div class="glass rounded-2xl p-8 ch" data-aos="fade-left">
+        <div class="mb-5 rounded-xl iz h-44 overflow-hidden">
+          <img src="images/gis-analytics.jpg" alt="GIS Analysis" class="rounded-xl w-full h-44 object-cover">
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3" x-text="L.gtitle"></h3>
+        <p class="text-white/65 leading-relaxed mb-5 text-sm" x-text="L.gdesc"></p>
+        <ul class="grid grid-cols-2 gap-2">
+          <template x-for="c in L.gcaps" :key="c">
+            <li class="flex items-start gap-2 text-white/70 text-xs">
+              <svg class="w-3.5 h-3.5 text-forest-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              <span x-text="c"></span>
+            </li>
+          </template>
+        </ul>
+      </div>
+    </div>
+    <!-- School streets callout -->
+    <div class="mt-8 rounded-2xl overflow-hidden grid md:grid-cols-2 glass ch" data-aos="fade-up">
+      <div class="iz h-64 md:h-auto">
+        <img src="images/school-street.jpg" alt="School street programme" class="w-full h-full object-cover">
+      </div>
+      <div class="p-8 flex flex-col justify-center">
+        <span class="sl">School Streets</span>
+        <h3 class="text-2xl font-extrabold text-white mb-4" x-text="lang==='en'?'Safe streets around every school.':'Biztonságos utcák minden iskola körül.'"></h3>
+        <p class="text-white/65 text-sm leading-relaxed mb-6" x-text="lang==='en'?'Our school street programmes combine traffic restrictions, cycling training, air quality measurement, and community design workshops. Temporary pilots that can become permanent transformations.':'Iskola utca programjaink forgalomkorlátozást, kerékpáros képzést, levegőminőség-mérést és közösségi tervezési workshopokat kombinálnak. Ideiglenes pilotkísérletekből tartós átalakulások lesznek.'"></p>
+        <a href="#contact" class="bg self-start" x-text="lang==='en'?'Discuss your school street':'Beszéljük meg'"></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TEAM ═══ -->
+<section id="team" class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-5">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <span class="sl" x-text="lang==='en'?'Our Team':'Csapatunk'"></span>
+      <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-5" x-text="lang==='en'?'The people behind the projects.':'Az emberek a projektek mögött.'"></h2>
+      <p class="text-gray-500 text-lg max-w-2xl mx-auto" x-text="lang==='en'?'We are a multidisciplinary team of engineers, lawyers, planners, and educators — united by the belief that streets should serve people.':'Mérnökökből, jogászokból, tervezőkből és oktatókból álló multidiszciplináris csapat vagyunk — abban hiszünk, hogy az utcáknak az embereket kell szolgálniuk.'"></p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+      <!-- Péter Biczók -->
+      <div class="ch text-center" data-aos="fade-up" data-aos-delay="0">
+        <div class="w-32 h-32 rounded-full mx-auto mb-5 overflow-hidden shadow-lg border-4 border-forest-500/20">
+          <img src="images/avatar-peter-biczok.png" alt="Biczók Péter" class="w-full h-full object-cover object-top">
+        </div>
+        <h3 class="font-bold text-gray-900 text-lg">Biczók Péter</h3>
+        <p class="text-forest-600 text-sm font-semibold mb-3" x-text="lang==='en'?'Managing Director · Transport Engineer':'Ügyvezető · Közlekedésmérnök'"></p>
+        <p class="text-gray-500 text-xs leading-relaxed" x-text="lang==='en'?'UCL-educated transport engineer and urban planner. Former lobbyist at the European Commission, researcher at UvA Amsterdam. Advisor to Remix and Mobycon representative for Eastern Europe.':'Közlekedésmérnök és telephelytervező. Az Európai Bizottságnál végzett lobbimunka után az amszterdami UvA-n kutatott. Mobycon és Remix tanácsadója.'"></p>
+        <a href="https://www.linkedin.com/in/peterbiczok/" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-1.5 mt-4 text-xs font-semibold text-gray-400 hover:text-forest-600 transition-colors no-underline">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+
+      <!-- Dalos Eszter -->
+      <div class="ch text-center" data-aos="fade-up" data-aos-delay="80">
+        <div class="w-32 h-32 rounded-full mx-auto mb-5 overflow-hidden shadow-lg border-4 border-forest-500/20">
+          <img src="images/avatar-dalos-eszter.png" alt="Dr. Dalos Eszter" class="w-full h-full object-cover object-top">
+        </div>
+        <h3 class="font-bold text-gray-900 text-lg">Dr. Dalos Eszter</h3>
+        <p class="text-forest-600 text-sm font-semibold mb-3" x-text="lang==='en'?'Managing Director · Lawyer':'Ügyvezető · Jogász'"></p>
+        <p class="text-gray-500 text-xs leading-relaxed" x-text="lang==='en'?'Practice-oriented urban advocate with a focus on women in the city. After living in London, Paris, Barcelona, and Madrid, she brings an international perspective to Hungarian urban planning.':'Városfókuszú jogász, aki a városban élő nők témájára specializálódott. London, Párizs, Barcelona és Madrid után Budapestről hozza a városi tervezésbe a nemzetközi szemléletet.'"></p>
+        <a href="https://www.linkedin.com/in/eszter-dalos" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-1.5 mt-4 text-xs font-semibold text-gray-400 hover:text-forest-600 transition-colors no-underline">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+
+      <!-- Árva János -->
+      <div class="ch text-center" data-aos="fade-up" data-aos-delay="160">
+        <div class="w-32 h-32 rounded-full mx-auto mb-5 overflow-hidden shadow-lg border-4 border-forest-500/20">
+          <img src="images/avatar-arva-janos.png" alt="Árva János" class="w-full h-full object-cover object-top">
+        </div>
+        <h3 class="font-bold text-gray-900 text-lg">Árva János</h3>
+        <p class="text-forest-600 text-sm font-semibold mb-3" x-text="lang==='en'?'Mobility Advisor · Cycling Educator':'Mobilitási Tanácsadó · Kerékpáros Oktató'"></p>
+        <p class="text-gray-500 text-xs leading-relaxed" x-text="lang==='en'?'Cycling pedagogue and urban mobility educator. Founded Hungary\'s first urban cycling school (Velo Budapest). 16 years of Budapest cycling expertise and instructor-trained in London.':'Kerékpáros pedagógus és mobilitási oktató. Megalapította Magyarország első városi kerékpáros iskoláját (Velo Budapest). 16 éves budapesti tapasztalat, londoni kerékpáros oktató végzettséggel.'"></p>
+        <a href="https://www.linkedin.com/in/janos-arva/" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-1.5 mt-4 text-xs font-semibold text-gray-400 hover:text-forest-600 transition-colors no-underline">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+
+      <!-- Bart István -->
+      <div class="ch text-center" data-aos="fade-up" data-aos-delay="240">
+        <div class="w-32 h-32 rounded-full mx-auto mb-5 overflow-hidden shadow-lg border-4 border-forest-500/20">
+          <img src="images/avatar-bart-istvan.png" alt="Bart István" class="w-full h-full object-cover object-top">
+        </div>
+        <h3 class="font-bold text-gray-900 text-lg">Bart István</h3>
+        <p class="text-forest-600 text-sm font-semibold mb-3" x-text="lang==='en'?'Energy & Climate Advisor':'Energetikai Tanácsadó'"></p>
+        <p class="text-gray-500 text-xs leading-relaxed" x-text="lang==='en'?'Director of the Climate Strategy Institute 2050 and Hungary\'s representative in international climate negotiations. 15+ years in climate policy, public service, and emissions research.':'A Klímastratégiai Intézet 2050 igazgatója és Magyarország képviselője a nemzetközi klímatárgyalásokon. 15+ év klímapolitikában, közszolgálatban és kibocsátáscsökkentési kutatásban.'"></p>
+        <a href="https://www.linkedin.com/in/istvanbart/" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-1.5 mt-4 text-xs font-semibold text-gray-400 hover:text-forest-600 transition-colors no-underline">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS STRIP ═══ -->
+<section class="py-16 bg-forest-600">
+  <div class="max-w-7xl mx-auto px-5 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+    <div data-aos="fade-up" data-aos-delay="0">
+      <div class="text-4xl font-extrabold text-white mb-1">10+</div>
+      <div class="text-white/75 text-sm font-medium" x-text="lang==='en'?'Projects delivered':'Leszállított projekt'"></div>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="80">
+      <div class="text-4xl font-extrabold text-white mb-1">6</div>
+      <div class="text-white/75 text-sm font-medium" x-text="lang==='en'?'Budapest districts':'Budapesti kerület'"></div>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="160">
+      <div class="text-4xl font-extrabold text-white mb-1">5+</div>
+      <div class="text-white/75 text-sm font-medium" x-text="lang==='en'?'Years experience':'Év tapasztalat'"></div>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="240">
+      <div class="text-4xl font-extrabold text-white mb-1">EU</div>
+      <div class="text-white/75 text-sm font-medium" x-text="lang==='en'?'Funded projects':'Finanszírozott projektek'"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact" class="py-24 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-5 grid lg:grid-cols-2 gap-12 items-start">
+    <div data-aos="fade-right">
+      <span class="sl" x-text="L.sl5"></span>
+      <h2 class="text-4xl font-extrabold text-gray-900 mb-4" x-text="L.sh5"></h2>
+      <p class="text-gray-500 text-lg mb-8" x-text="L.ss5"></p>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-center gap-3 text-gray-700">
+          <div class="w-10 h-10 rounded-xl bg-forest-500/10 flex items-center justify-center text-forest-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <span x-text="L.addr" class="text-sm"></span>
+        </div>
+        <div class="flex items-center gap-3 text-gray-700">
+          <div class="w-10 h-10 rounded-xl bg-forest-500/10 flex items-center justify-center text-forest-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <a :href="'mailto:'+L.eml" x-text="L.eml" class="text-sm text-forest-600 font-medium no-underline hover:text-forest-500"></a>
+        </div>
+      </div>
+      <div id="map" class="h-64 rounded-2xl shadow-md"></div>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-left">
+      <form action="https://formspree.io/f/info@varosmobilitas.hu" method="POST" class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2" x-text="L.flabel"></label>
+          <input type="text" name="name" :placeholder="L.flabel" required>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2" x-text="L.elabel"></label>
+          <input type="email" name="email" :placeholder="L.elabel" required>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2" x-text="L.mlabel"></label>
+          <textarea name="message" rows="5" :placeholder="lang==='en'?'Tell us about your project or challenge...':'Mesélje el projektjét vagy kihívását...'" required style="resize:vertical"></textarea>
+        </div>
+        <button type="submit" class="bg w-full justify-center" x-text="L.send"></button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="py-12" style="background:#060F09">
+  <div class="max-w-7xl mx-auto px-5">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+      <div class="lg:col-span-2">
+        <div class="flex items-center gap-2 text-white font-bold text-xl mb-3">
+          <span class="text-2xl">🚲</span><span>Bicyclize</span>
+        </div>
+        <p class="text-white/50 text-sm leading-relaxed max-w-sm" x-text="lang==='en'?'Urban mobility consultancy based in Budapest. We make cities better places to live, walk, and cycle.':'Budapesti székhelyű városi mobilitás tanácsadó. Élhetőbbé, sétálhatóbbá és kerékpározhatóbbá tesszük a városokat.'"></p>
+      </div>
+      <div>
+        <div class="text-white/30 text-xs font-bold tracking-widest uppercase mb-4" x-text="lang==='en'?'Navigation':'Navigáció'"></div>
+        <div class="space-y-2">
+          <template x-for="(item,i) in L.nav" :key="i">
+            <div><a :href="['#services','#approach','#projects','#tools','#team','#contact'][i]" x-text="item"
+               class="text-white/55 hover:text-white text-sm no-underline transition-colors"></a></div>
+          </template>
+        </div>
+      </div>
+      <div>
+        <div class="text-white/30 text-xs font-bold tracking-widest uppercase mb-4">Legal</div>
+        <div class="space-y-2">
+          <div><a href="#privacy" class="text-white/55 hover:text-white text-sm no-underline transition-colors" x-text="L.ptitle"></a></div>
+          <div><a href="#terms" class="text-white/55 hover:text-white text-sm no-underline transition-colors" x-text="L.ttitle"></a></div>
+          <div><a href="https://varosmobilitas.hu" target="_blank" class="text-white/55 hover:text-white text-sm no-underline transition-colors">varosmobilitas.hu</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-white/35 text-xs">© 2026 Város és Mobilitás Intézet Non-Profit Kft. — Bicyclize</p>
+      <p class="text-white/35 text-xs" x-text="L.ftag"></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ PRIVACY ═══ -->
+<section id="privacy" class="py-20 bg-white border-t border-gray-100">
+  <div class="max-w-3xl mx-auto px-5 prose prose-gray">
+    <h1 x-text="L.ptitle" class="text-3xl font-extrabold text-gray-900 mb-2"></h1>
+    <p class="text-gray-500 text-sm mb-8" x-text="lang==='en'?'Last updated: March 2026':'Utoljára módosítva: 2026. március'"></p>
+    <div class="space-y-6 text-gray-600 text-sm leading-relaxed">
+      <p x-text="lang==='en'?'Bicyclize (operated by Város és Mobilitás Intézet Non-Profit Kft., Andrássy út 79, Budapest 1062, info@varosmobilitas.hu) collects only the personal data necessary to respond to enquiries and deliver services.':'A Bicyclize (üzemeltető: Város és Mobilitás Intézet Non-Profit Kft., 1062 Budapest, Andrássy út 79, info@varosmobilitas.hu) csak az érdeklődések megválaszolásához és a szolgáltatások nyújtásához szükséges személyes adatokat gyűjti.'"></p>
+      <div>
+        <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Data we collect':'Gyűjtött adatok'"></h2>
+        <ul class="list-disc pl-5 space-y-1">
+          <li x-text="lang==='en'?'Contact form: name, email, message. Used solely to respond to your enquiry.':'Kapcsolatfelvételi űrlap: név, e-mail cím, üzenet. Kizárólag az érdeklődés megválaszolására használjuk.'"></li>
+          <li x-text="lang==='en'?'Newsletter: email address for updates (with your consent).':'Hírlevél: e-mail cím értesítésekhez (beleegyezésével).'"></li>
+          <li x-text="lang==='en'?'Analytics: anonymised page visit data via privacy-respecting analytics.':'Analitika: anonimizált látogatási adatok adatvédelmet tiszteletben tartó analitikai eszközzel.'"></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Your rights':'Az Ön jogai'"></h2>
+        <p x-text="lang==='en'?'Under GDPR you have the right to access, rectify, erase, and object to processing of your personal data. Contact us at info@varosmobilitas.hu.':'A GDPR alapján Ön jogosult hozzáférni, helyesbíteni, töröltetni és tiltakozni a személyes adatai kezelése ellen. Lépjen kapcsolatba velünk: info@varosmobilitas.hu.'"></p>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Data storage':'Adattárolás'"></h2>
+        <p x-text="lang==='en'?'All data is stored on EU-based servers. We do not sell or share personal data with third parties except where required by law.':'Minden adat EU-alapú szervereken tárolódik. Nem értékesítjük vagy adjuk át személyes adatait harmadik feleknek, kivéve jogszabályi kötelezettség esetén.'"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TERMS ═══ -->
+<section id="terms" class="py-20 bg-gray-50 border-t border-gray-100">
+  <div class="max-w-3xl mx-auto px-5">
+    <h1 x-text="L.ttitle" class="text-3xl font-extrabold text-gray-900 mb-2"></h1>
+    <p class="text-gray-500 text-sm mb-8" x-text="lang==='en'?'Last updated: March 2026':'Utoljára módosítva: 2026. március'"></p>
+    <div class="space-y-6 text-gray-600 text-sm leading-relaxed">
+      <p x-text="lang==='en'?'This website is operated by Város és Mobilitás Intézet Non-Profit Kft. (registered in Hungary, Andrássy út 79, Budapest 1062). By using this website you agree to these terms.':'Ezt a weboldalt a Város és Mobilitás Intézet Non-Profit Kft. (magyarországi bejegyzésű, 1062 Budapest, Andrássy út 79) üzemelteti. Az oldal használatával elfogadja ezeket a feltételeket.'"></p>
+      <div>
+        <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Intellectual property':'Szellemi tulajdon'"></h2>
+        <p x-text="lang==='en'?'All content on this website — including text, images, maps, and designs — is the property of Város és Mobilitás Intézet Non-Profit Kft. or its licensors. Reproduction without written permission is prohibited.':'Az ezen a weboldalon található összes tartalom — beleértve a szövegeket, képeket, térképeket és terveket — a Város és Mobilitás Intézet Non-Profit Kft. vagy licencadóinak tulajdona. Írásbeli engedély nélküli reprodukció tilos.'"></p>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Social media API use':'Közösségi média API használat'"></h2>
+        <p x-text="lang==='en'?'We use social media APIs solely to publish our own content on our own official pages. We do not scrape, store, or process other users\' content.':'A közösségi média API-kat kizárólag saját tartalmunk saját hivatalos oldalainkon való közzétételére használjuk. Nem gyűjtjük, tároljuk vagy dolgozzuk fel más felhasználók tartalmát.'"></p>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Limitation of liability':'Felelősségkorlátozás'"></h2>
+        <p x-text="lang==='en'?'The information on this site is provided for general informational purposes only. Város és Mobilitás Intézet Non-Profit Kft. is not liable for any decisions made based on this content.':'Az ezen az oldalon szereplő információk csak általános tájékoztatási célokat szolgálnak. A Város és Mobilitás Intézet Non-Profit Kft. nem vállal felelősséget az ezen tartalom alapján hozott döntésekért.'"></p>
+      </div>
+      <p class="text-gray-500" x-text="lang==='en'?'Governing law: Hungarian law. Disputes submitted to the courts of Budapest.':'Alkalmazandó jog: magyar jog. Jogviták a budapesti bíróságok hatáskörébe tartoznak.'"></p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // AOS init
+  document.addEventListener('DOMContentLoaded', function() {
+    AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 });
+  });
+
+  // Leaflet map — runs after DOM ready
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      var map = L.map('map', { zoomControl: true, scrollWheelZoom: false })
+        .setView([47.5013, 19.0617], 14);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19
+      }).addTo(map);
+      var greenIcon = L.divIcon({
+        className: '',
+        html: '<div style="width:36px;height:36px;background:#22c55e;border:3px solid #fff;border-radius:50%;box-shadow:0 4px 12px rgba(34,197,94,.4);display:flex;align-items:center;justify-content:center;font-size:16px;">🚲</div>',
+        iconSize: [36,36], iconAnchor: [18,18]
+      });
+      L.marker([47.5013, 19.0617], {icon: greenIcon})
+        .addTo(map)
+        .bindPopup('<strong>Bicyclize</strong><br>Andrássy út 79<br>Budapest, 1062')
+        .openPopup();
+    } catch(e) { console.warn('Map init failed:', e); }
+  });
 </script>
 
-        <meta charset="utf-8">
-        <title>Bicyclize Consulting</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Site Description Here">
-         <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
-        <link href="css/stack-interface.css" rel="stylesheet" type="text/css" media="all" />
-        <link href="css/socicon.css" rel="stylesheet" type="text/css" media="all" />
-        <link href="css/lightbox.min.css" rel="stylesheet" type="text/css" media="all" />
-        <link href="css/flickity.css" rel="stylesheet" type="text/css" media="all" />
-        <link href="css/iconsmind.css" rel="stylesheet" type="text/css" media="all" />
-        <link href="css/jquery.steps.css" rel="stylesheet" type="text/css" media="all" />
-        <link href="css/theme.css" rel="stylesheet" type="text/css" media="all" />
-        <link href="css/custom.css" rel="stylesheet" type="text/css" media="all" />
-        <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-        <link href="css/fontawesome-all.css" rel="stylesheet" type="text/css" media="all" />
-        <link href="css/fa-brands.css" rel="stylesheet" type="text/css" media="all" />
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:200,300,400,400i,500,600,700%7CMerriweather:300,300i" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-         <script src="https://snapwidget.com/js/snapwidget.js"></script>
- 
-    </head>
-    <body class=" " data-smooth-scroll-offset='64'>
+<script>
+/**
+ * Iframe 元素高亮注入脚本
+ * 需要在目标网站中引入此脚本来支持跨域 iframe 高亮功能
+ *
+ * 使用方法：
+ * 1. 将此脚本添加到目标网站的 HTML 中
+ * 2. 或通过浏览器扩展、用户脚本等方式注入
+ */
 
+(function () {
+  "use strict";
 
-        
-        <div class="nav-container ">
-            <div class="bar bar--mobile-sticky visible-xs" data-scroll-class="100px:pos-fixed">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-3 col-md-2">
-                            <a href="index.html">
-                                <img class="logo logo-dark" alt="logo" src="img/logo-dark.png" />
-                                <img class="logo logo-light" alt="logo" src="img/logo-light.png" />
-                            </a>
-                        </div>
-                        <div class="col-9 col-md-10 text-right">
-                            <a href="#" class="hamburger-toggle" data-toggle-class="#menu1;hidden-xs">
-                                <i class="icon icon--sm stack-interface stack-menu"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <!--end of row-->
-                </div>
-                <!--end of container-->
-            </div>
-            <!--end bar-->
-            <nav id="menu1" class="bar hidden-xs" data-scroll-class="100px:pos-fixed">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-1 col-md-2 hidden-xs">
-                            <div class="bar__module">
-                                <a href="index.html">
-                                    <img class="logo logo-dark" alt="logo" src="img/logo-dark.png" />
-                                    <img class="logo logo-light" alt="logo" src="img/logo-light.png" />
-                                </a>
-                            </div>
-                            <!--end module-->
-                        </div>
-                        <div class="col-lg-11 col-md-12 text-right text-left-xs text-left-sm">
-                            <div class="bar__module">
-                                <ul class="menu-horizontal text-left">
-                                   
-                                </ul>
-                            </div>
-                            <!--end module-->
-                            <div class="bar__module">
-                            	<ul class="menu-horizontal">
-									<li>
-										<a href="#Services">Services</a>
-									</li>
-									<li>
-										<a href="#Why">Why</a>
-									</li>
-									<!--li>
-										<a href="#What">What</a>
-									</li-->
-									
-									<li>
-										<a href="#Projects">Projects</a>
-									</li>
-									
-									<li>
-										<a href="https://blog.bicyclize.com" target="_blank">Blog</a>
-									</li>
-									<li>
-										<a href="#Projects"></a>
-									</li>
-									
-								</ul>   
+  // 检查是否在 iframe 中
+  if (window.self === window.top) {
+    return; // 不在 iframe 中，不执行
+  }
 
+  // 检查是否已经初始化过
+  if (window.__iframeHighlightInitialized) {
+    return;
+  }
+  window.__iframeHighlightInitialized = true;
+  console.log("Iframe 高亮脚本已加载");
 
+  // 创建高亮覆盖层
+  var overlay = document.createElement("div");
+  overlay.id = "iframe-highlight-overlay";
+  overlay.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100vw;\n    height: 100vh;\n    pointer-events: none;\n    z-index: 999999;\n    overflow: hidden;\n  ";
 
-                            <!--     <a  href="#Why" target="_blank">
-                                    <span class="btn__text">
-                                        Why
-                                    </span>
-                                </a>
-                                <a  href="#What" target="_blank">
-                                    <span class="btn__text">
-                                        What
-                                    </span>
-                                </a>
-                                
-                                <a class="btn btn--sm type--uppercase" href="#How" target="_blank">
-                                    <span class="btn__text">
-                                        How
-                                    </span>
-                                </a>
-                                
-                                <a class="btn btn--sm type--uppercase" href="https://blog.bicyclize.com" target="_blank">
-                                    <span class="btn__text">
-                                        Blog
-                                    </span>
-                                </a> -->
-                                <a class="btn btn--sm btn--primary type--uppercase" href="https://www.bicyclease.eu" target="_blank">
-                                    <span class="btn__text">
-                                        eBike Hire
-                                    </span>
-                                </a>
-                            </div>
-                            <!--end module-->
-                        </div>
-                    </div>
-                    <!--end of row-->
-                </div>
-                <!--end of container-->
-            </nav>
-            <!--end bar-->
-        </div>
-        <div class="main-container">
-            <section class="text-center height-80 ">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            
-                            <div class="typed-headline">
-                                <span class="h1 inline-block">Bicyclize</span>
-                                <span class="h1 inline-block typed-text typed-text--cursor color--primary" data-typed-strings="your hood., your job., your school., your city., your commute.">your city.</span>
-                            </div>
-                            <p class="lead">
-                                The hollistic approach to create human shaped urban environments.
-                            </p>
-                            <div class="typeform-widget" data-url="https://peterbiczok.typeform.com/to/HBiJi6" data-transparency="50" style="width: 100%; height: 350px;"></div> <script> (function() { var qs,js,q,s,d=document, gi=d.getElementById, ce=d.createElement, gt=d.getElementsByTagName, id="typef_orm", b="https://embed.typeform.com/"; if(!gi.call(d,id)) { js=ce.call(d,"script"); js.id=id; js.src=b+"embed.js"; q=gt.call(d,"script")[0]; q.parentNode.insertBefore(js,q) } })() </script> <div style="font-family: Sans-Serif;font-size: 12px;color: #999;opacity: 0.5; padding-top: 5px;"> powered by <a href="https://admin.typeform.com/signup?utm_campaign=HBiJi6&utm_source=typeform.com-13437308-Basic&utm_medium=typeform&utm_content=typeform-embedded-poweredbytypeform&utm_term=EN" style="color: #999" target="_blank">Typeform</a> </div>
-                        </div>
-                    </div>
-                    <!--end of row-->
-                </div>
-                <!--end of container-->
-            </section>
-            
+  // 创建悬停高亮框（虚线边框）
+  var highlightBox = document.createElement("div");
+  highlightBox.id = "iframe-highlight-box";
+  highlightBox.style.cssText = "\n    position: absolute;\n    border: 2px dashed #007AFF;\n    background: rgba(0, 122, 255, 0.08);\n    pointer-events: none;\n    display: none;\n    transition: all 0.1s ease;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);\n    border-radius: 2px;\n  ";
 
-            <section id="Services" class="bg--secondary">
+  // 创建选中节点的常驻高亮框（实线边框）
+  var selectedBox = document.createElement("div");
+  selectedBox.id = "iframe-selected-box";
+  selectedBox.style.cssText = "\n    position: absolute;\n    border: 2px solid #007AFF;\n    pointer-events: none;\n    display: none;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 8px rgba(255, 107, 53, 0.4);\n    border-radius: 2px;\n    z-index: 1000000;\n  ";
 
-                <div class="container ">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-12">
-                            <h2>Services</h2>
-                            
-                        </div>
+  // 创建悬停标签显示
+  var tagLabel = document.createElement("div");
+  tagLabel.id = "iframe-tag-label";
+  tagLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 2px 6px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 2px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000001;\n    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);\n    font-weight: 500;\n  ";
 
-                        
-                            
+  // 创建选中节点标签
+  var selectedLabel = document.createElement("div");
+  selectedLabel.id = "iframe-selected-label";
+  selectedLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 3px 8px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 3px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000002;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);\n    font-weight: 600;\n  ";
+  overlay.appendChild(highlightBox);
+  overlay.appendChild(selectedBox);
+  overlay.appendChild(tagLabel);
+  overlay.appendChild(selectedLabel);
+  document.body.appendChild(overlay);
 
-                        <div class="col-md-6 col-lg-6">
-                                <div class="imagebg boxed boxed--lg" data-overlay="7">
-                                    <div class="background-image-holder">
-                                        <img alt="background" src="img/moscow3.png" />
-                                    </div>
-                                    <div class="container">
-                                        <h5>Transit network integration</h5>
-                                      
-                                        <p>
-                                            The secret element to make cycling work everywhere, even in massive megacities. <br>
-                                            Integrating cycling to transit systems improves the efficiency of both, while creates healthier, more social environments and more efficient land uses.
-                                        </p>
-                                        
-                                        <a class="btn btn--primary" href="https://blog.bicyclize.com/intelligent-mobility-e10f8e047406">
-                                            <span class="btn__text">
-                                                Read more
-                                            </span>
-                                        </a>
-                                    </div>
-                                </div>
-                        </div>
-                        <div class="col-md-4 col-lg-4">
-                                <div class="imagebg boxed boxed--lg" data-overlay="7">
-                                    <div class="background-image-holder">
-                                        <img alt="background" src="img/delivery.jpg" />
-                                    </div>
-                                    <div class="container">
-                                        <h5>Bicycle share schemes</h5>
-                                        <li> 
-                                            <p>
-                                                Transit based bike hire
-                                            </p>
-					    </li>
+  // 存储当前选中的元素
+  var selectedElement = null;
+  var highlightEnabled = false;
 
-                                        <li> 
-                                            <p>
-                                                University/School fleet
-                                            </p>
-                                        </li>
-                                        <li> 
-                                            <p>
-                                                Corporate bike fleet
-                                            </p>
-                                        </li>
-                                        <li> 
-                                            <p>
-                                                Cargo-bike fleet
-                                            </p>
-                                        </li>
+  // 更新选中元素的高亮显示
+  function updateSelectedHighlight(element) {
+    console.log("updateSelectedHighlight called with:", element);
+    if (!element) {
+      selectedBox.style.display = "none";
+      selectedLabel.style.display = "none";
+      selectedElement = null;
+      console.log("Cleared selected highlight");
+      return;
+    }
+    selectedElement = element;
+    var rect = element.getBoundingClientRect();
+    console.log("Selected element rect:", rect);
 
-                                        <hr> 
-                                        <a class="btn btn--primary" href="http://biciklizing.hu">
-                                            <span class="btn__text">
-                                                Read more
-                                            </span>
-                                        </a>
-                                        
-                                    </div>
-                                </div>
-                        </div>
-                        
-                        <div class="col-md-6 col-lg-6">
-                                <div class="imagebg boxed boxed--lg" data-overlay="7">
-                                    <div class="background-image-holder">
-                                        <img alt="background" src="img/road4Cars.jpeg" />
-                                    </div>
-                                    <div class="container">
-                                        <h5>GIS analytics</h5>
-                                        
-                                        <li> 
-                                            <p>
-                                                Network analysis
-                                            </p>
-                                        </li>
-                                        <li> 
-                                            <p>
-                                                Geographic Weighted Regression
-                                            </p>
-                                        </li>
-                                        <li> 
-                                            <p>
-                                                Catchment area analysis
-                                            </p>
-                                        </li>
-                                        <li> 
-                                            <p>
-                                                Cycling potential measurement
-                                            </p>
-                                        </li>
-                                        <hr>
-                                        <a class="btn btn--primary" href="https://fileradar.nl">
-                                            <span class="btn__text">
-                                                Read more
-                                            </span>
-                                        </a>
-                                    </div>
-                                </div>
-                        </div>
+    // 更新选中高亮框位置
+    selectedBox.style.display = "block";
+    selectedBox.style.left = "".concat(rect.left - 2, "px");
+    selectedBox.style.top = "".concat(rect.top - 2, "px");
+    selectedBox.style.width = "".concat(rect.width + 4, "px");
+    selectedBox.style.height = "".concat(rect.height + 4, "px");
 
-                        <div class="col-md-6 col-lg-6">
-                                <div class="imagebg boxed boxed--lg" data-overlay="7">
-                                    <div class="background-image-holder">
-                                        <img alt="background" src="img/disability.png" />
-                                    </div>
-                                    <div class="container">
-                                        <h5>Infrastructure and Design</h5>
-                                        <li> 
-                                            <p>
-                                                Cycling network planning
-                                            </p>
-                                        </li>
+    // 更新选中标签位置和内容
+    selectedLabel.style.display = "block";
+    selectedLabel.textContent = "\u2713 <".concat(element.tagName.toLowerCase(), ">");
 
-                                        <li> 
-                                            <p>
-                                                Quick and cost-efficient interventions
-                                            </p>
-                                        </li>
-                                        <li> 
-                                            <p>
-                                                Safety assessment
-                                            </p>
-                                        </li>
-                                        <li> 
-                                            <p>
-                                                Economics assessment 
-                                            </p>
-                                        </li>
-                                        
-                                        <hr> 
-                                        <a class="btn btn--primary" href="https://blog.bicyclize.com" target="_blank">
-                                            <span class="btn__text">
-                                                Read more
-                                            </span>
-                                        </a>
-                                        
-                                    </div>
-                                </div>
-                        </div>
-                        <div class="col-md-6 col-lg-6">
-                                <div class="imagebg boxed boxed--lg" data-overlay="7">
-                                    <div class="background-image-holder">
-                                        <img alt="background" src="img/kids.jpg" />
-                                    </div>
-                                    <div class="container">
-                                        <h5>Communication</h5>
-                                        <li> 
-                                            <p>
-                                                Communication Strategy
-                                            </p>
-                                        </li>
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 28;
+    var labelLeft = rect.left;
 
-                                        <li> 
-                                            <p>
-                                                Building websites, blogs
-                                            </p>
-                                        </li>
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 5) {
+      labelTop = rect.bottom + 5;
+    }
 
-                                        <li> 
-                                            <p>
-                                                Social media training
-                                            </p>
-                                        </li>
-                                        <li> 
-                                            <p>
-                                                Content creation
-                                            </p>
-                                        </li>
-                                         <hr> 
+    // 如果标签会超出右侧，向左调整
+    var labelWidth = selectedLabel.offsetWidth || 100; // 预估宽度
+    if (labelLeft + labelWidth > window.innerWidth - 10) {
+      labelLeft = window.innerWidth - labelWidth - 10;
+    }
+    selectedLabel.style.left = "".concat(Math.max(5, labelLeft), "px");
+    selectedLabel.style.top = "".concat(labelTop, "px");
+    console.log("Selected highlight positioned at:", {
+      left: selectedBox.style.left,
+      top: selectedBox.style.top,
+      width: selectedBox.style.width,
+      height: selectedBox.style.height
+    });
+  }
+  function getElementSelector(element) {
+    if (!(element instanceof Element)) throw new Error('Argument must be a DOM element');
+    var segments = [];
+    var current = element;
+    while (current !== document.documentElement) {
+      var selector = '';
+      // 优先检查唯一ID
+      if (current.id && document.querySelectorAll("#".concat(current.id)).length === 1) {
+        segments.unshift("#".concat(current.id));
+        break; // ID唯一，无需继续向上
+      }
 
-                                        
-                                       
-                                    </div>
-                                </div>
-                        </div>
+      // 生成类名选择器（取第一个有效类名）
+      var classes = Array.from(current.classList).filter(function (c) {
+        return !c.startsWith('js-');
+      });
+      var className = classes.length > 0 ? ".".concat(classes[0]) : '';
 
-                        <div class="col-md-6 col-lg-6">
-                                <div class="imagebg boxed boxed--lg" data-overlay="7">
-                                    <div class="background-image-holder">
-                                        <img alt="background" src="img/CEU.jpg" />
-                                    </div>
-                                    <div class="container">
-                                        <h5>Education</h5>
-                                        <li> 
-                                            <p>
-                                                Workshops
-                                            </p>
-                                        </li>
-                                        <li> 
-                                            <p>
-                                                Scalable training materials
-                                            </p>
-                                        </li>
+      // 生成位置索引（nth-child）
+      var tag = current.tagName.toLowerCase();
+      if (!className) {
+        var siblings = Array.from(current.parentNode.children);
+        var index = siblings.findIndex(function (el) {
+          return el === current;
+        }) + 1;
+        selector = "".concat(tag, ":nth-child(").concat(index, ")");
+      } else {
+        selector = className;
+      }
+      segments.unshift(selector);
+      current = current.parentElement;
+    }
 
-                                        <li> 
-                                            <p>
-                                                Technical tools
-                                            </p>
-                                        </li>
-                                        <li> 
-                                            <p>
-                                                Video materials
-                                            </p>
-                                        </li>
-                                         <hr> 
-                                    </div>
-                                </div>
-                        </div>
-                        
+    // 处理根元素
+    if (current === document.documentElement) {
+      segments.unshift('html');
+    }
+    return segments.join(' > ');
+  }
 
-                       
-                        
-                    </div>
+  // 获取元素文本内容
+  function getElementText(element) {
+    var _element$textContent;
+    if (element.tagName === "INPUT") {
+      return element.value || element.placeholder || "";
+    }
+    if (element.tagName === "TEXTAREA") {
+      return element.value || element.placeholder || "";
+    }
+    var text = ((_element$textContent = element.textContent) === null || _element$textContent === void 0 ? void 0 : _element$textContent.trim()) || "";
+    return text.length > 50 ? text.substring(0, 50) + "..." : text;
+  }
 
-                 
-                    <!--end of row-->
+  // 获取元素属性信息
+  function getElementAttributes(element) {
+    var attrs = {};
+    for (var i = 0; i < element.attributes.length; i++) {
+      var attr = element.attributes[i];
+      attrs[attr.name] = attr.value;
+    }
+    return attrs;
+  }
 
-                </div>
-                <!--end of container-->
-            </section>
-            <section id="Why" class="bg--secondary">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-md-10 col-lg-12">
-                            <h2>Why</h2>
-                            <p class="lead">
-                                Cycling is the most efficient, equitable, healthy, accessible and environmentally friendly transport mode. Providing infrastructure for cycling unlocks the potential to allow literally anyone from the earliest ages the right to safe mobility. Cycling is even more energy efficient than walking, creates less strain on the human body and effectively lengthens travellers' lives. Due to the low cost of entry, cycling also means that people from any social and economic segment can enjoy the benefits of flexible, independent travel. Cycling also facilitates interactions en-route, improving social and spatial awareness. 
-                            </p>
-                        </div>
-                    </div>
-                    <!--end of row-->
-                </div>
-                <!--end of container-->
-            </section>
-            <section class="cover cover-features imagebg space--lg" data-overlay="5">
-                <div class="background-image-holder">
-                    <img alt="background" src="img/kidsLight.jpg" />
-                </div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="feature feature-2 boxed boxed--border">
-                                <i class="fas fa-chart-line fa-3x color--primary"></i>
-                                <div class="feature__body">
-                                    <h5>Efficiency</h5>
-                                    <p>
-                                        Cycling is the most efficient mode of mobility. The least energy input to source and tool allows the furthest ride compared to any other mode.
-                                    </p>
-                                </div>
-                            </div>
-                            <!--end feature-->
-                        </div>
-                        <div class="col-md-4">
-                            <div class="feature feature-2 boxed boxed--border">
-                                <i class="fas fa-shopping-cart fa-3x color--primary"></i>
-                                <div class="feature__body">
-                                    <h5>Shopping</h5>
-                                    <p>
-                                        More customers passing shop windows, more space for customer parking. Cyclists help revitalising the high street and keeping retail income in locality.
-                                    </p>
-                                </div>
-                            </div>
-                            <!--end feature-->
-                        </div>
-                        <div class="col-md-4">
-                            <div class="feature feature-2 boxed boxed--border">
-                                <i class="fas fa-briefcase fa-3x color--primary"></i>
-                                <div class="feature__body">
-                                    <h5>Business</h5>
-                                    <p>
-                                        Cycling means business. Those who cycle to work report less absence compared to non-cycling colleages in the Netherlands.  
-                                    </p>
-                                </div>
-                            </div>
-                            <!--end feature-->
-                        </div>
-                        <div class="col-md-4">
-                            <div class="feature feature-2 boxed boxed--border">
-                                <i class="far fa-heart fa-3x color--primary"></i>
-                                <div class="feature__body">
-                                    <h5>Creating life</h5>
-                                    <p>
-                                        Every minute cycled expands life expectency with an additional minute. 
-                                    </p>
-                                </div>
-                            </div>
-                            <!--end feature-->
-                        </div>
-                        <div class="col-md-4">
-                            <div class="feature feature-2 boxed boxed--border">
-                                <i class="fas fa-universal-access fa-3x color--primary"></i>
-                                <div class="feature__body">
-                                    <h5>Social equity</h5>
-                                    <p>
-                                        Young, old, weak, strong. Cycling improves social equity by providing a mutual platform for mobility for rich and poor. 
+  // 鼠标悬停事件处理
+  function handleMouseOver(e) {
+    if (!highlightEnabled) return;
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
 
-                                    </p>
-                                </div>
-                            </div>
-                            <!--end feature-->
-                        </div>
-                        <div class="col-md-4">
-                            <div class="feature feature-2 boxed boxed--border">
-                                <i class="far fa-money-bill-alt fa-3x color--primary"></i>
-                                <div class="feature__body">
-                                    <h5>Economics</h5>
-                                    <p>
-                                        The Dutch health system saves annually €3bn relative to similar social groups in Germany thanks to the health benefits of cycling. 
+    // 避免高亮 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
 
-                                    </p>
-                                </div>
-                            </div>
-                            <!--end feature-->
-                        </div>
-                        
-                    </div>
-                    <!--end of row-->
-                </div>
-                <!--end of container-->
-            </section>
+    // 如果是已选中的元素，不显示悬停高亮
+    if (target === selectedElement) {
+      highlightBox.style.display = "none";
+      tagLabel.style.display = "none";
+      return;
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
 
-			<section class="text-center bg--dark">
-	            <div class="container">
-	                <div class="row">
-	                    <div class="col-md-12">
-	                        <div class="heading-block">
-	                            <h2>Follow us for updates and more</h2>
-	                        </div>
-	                       <!-- SnapWidget -->
+    // 更新悬停高亮框位置
+    highlightBox.style.display = "block";
+    highlightBox.style.left = "".concat(rect.left - 2, "px");
+    highlightBox.style.top = "".concat(rect.top - 2, "px");
+    highlightBox.style.width = "".concat(rect.width + 4, "px");
+    highlightBox.style.height = "".concat(rect.height + 4, "px");
 
-							<!-- SnapWidget -->
-<iframe text-center src="https://snapwidget.com/embed/690695" class="snapwidget-widget" allowtransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:480px; height:160px"></iframe>
-	                        <a class="btn btn--icon bg--instagram type--uppercase" href="https://www.instagram.com/bicyclize/">
-	                            <span class="btn__text">
-	                                <i class="socicon socicon-instagram"></i>
-	                                Follow @bicyclize
-	                            </span>
-	                        </a>
-	                    </div>
-	                </div>
-	                <!--end row-->
-	            </div>
-	            <!--end of container-->
-	        </section>
-           
+    // 更新标签位置和内容
+    tagLabel.style.display = "block";
+    tagLabel.textContent = "<".concat(target.tagName.toLowerCase(), ">");
 
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 22;
+    var labelLeft = rect.left;
 
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 0) {
+      labelTop = rect.bottom + 5;
+    }
 
+    // 如果标签会超出右侧，向左调整
+    if (labelLeft + tagLabel.offsetWidth > window.innerWidth) {
+      labelLeft = window.innerWidth - tagLabel.offsetWidth - 5;
+    }
+    tagLabel.style.left = "".concat(Math.max(0, labelLeft), "px");
+    tagLabel.style.top = "".concat(labelTop, "px");
 
-            <!--section id="What" class="bg">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-md-6 col-lg-6">
-                            <h2>What</h2>
-                            <p class="lead">
-                              Bicyclize is urbanism consultancy focusing on all aspects to make our cities more cycling friendly. <br>
-                              <h3>We do not want everyone to cycle. We want to ensure that everyone has the choice to cycle. </h3>
-                              <br>
-                              When travellers have choices they tend to chose the option that is the most efficient/comfortable for them. Making cycling convenient for short trips, means that less cars will be on the roads making travel more convenient for those needing to make longer trips in cars or public transit. 
+    // 发送消息到父窗口
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
 
-                            </p>
-                        </div>
-                        <div class="col-md-6 col-lg-6">
-                        
+  // 鼠标离开事件处理
+  function handleMouseOut(e) {
+    if (!highlightEnabled) return;
+    var relatedTarget = e.relatedTarget;
 
-	                        <div class="tweets-feed slider" data-feed-name="bicyclize" data-amount="8" data-paging="true"></div>
-	                    </div>
-                    </div>
-                    
-                </div>
-              
-            </section-->
+    // 如果鼠标移动到高亮相关元素上，不隐藏高亮
+    if (relatedTarget && (relatedTarget === highlightBox || relatedTarget === tagLabel || relatedTarget === overlay || relatedTarget === selectedBox || relatedTarget === selectedLabel)) {
+      return;
+    }
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: null,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
 
+  // 点击事件处理
+  function handleClick(e) {
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
 
+    // 避免处理 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
 
-            
+    // 检查是否是交互元素，这些元素需要保留默认行为
+    var isInteractiveElement = ['input', 'textarea', 'select', 'button', 'a'].includes(target.tagName.toLowerCase());
 
-            <section id="Projects" class="cover cover-features imagebg space--lg" data-overlay="5">
-                <div class="background-image-holder">
-                    <img alt="background" src="img/rail.jpg" />
-                </div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2>Previous projects</h2>
-                            <div class="slider" data-arrows="false" data-paging="true">
-                                <ul class="slides">
-                                    <li class="col-md-4 col-12">
-                                        <div class="feature feature-1">
-                                            <img alt="Image" src="img/budapest.png" height=250px />
-                                            <div class="feature__body boxed boxed--border">
-                                                <h5>Budapest Transit integration</h5>
-                                                <p>
-                                                    Redevelopping the Hungarian capital's transit network so that more people have better access to mobility
-                                                </p>
-                                                <a href="https://blog.bicyclize.com" target="_blank">
-                                                    Read the blogpost
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <!--end feature-->
-                                    </li>
-                                    <li class="col-md-4 col-12">
-                                        <div class="feature feature-1">
-                                            <img alt="Image" src="img/moscow1.png"   />
-                                            <div class="feature__body boxed boxed--border">
-                                                <h5>Moscow Bike-Transit Case</h5>
-                                                <p>
-                                                    How to make a megalopolis cycle friendly. It works for 17mln people in the Netherlands, should work for 13mln in Moscow.<br>
-                                                    The secret lies in good integration of high-level transit (train, BRT, metro etc) and cycling.
-                                                </p>
-                                                <a href="https://blog.bicyclize.com" target="_blank">
-                                                    Read the blogpost
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <!--end feature-->
-                                    </li>
-                                    <li class="col-md-4 col-12">
-                                        <div class="feature feature-1">
-                                            <img alt="Image" src="img/maltaBRT.png" height=250px />
-                                            <div class="feature__body boxed boxed--border">
-                                                <h5>Malta Transport Planning</h5>
-                                                <p>
-                                                    Cycle network and BRT planning
-                                                </p>
-                                                <a href="https://blog.bicyclize.com" target="_blank">
-                                                    Read the blogpost
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <!--end feature-->
-                                    </li>
-                                    <li class="col-md-4 col-12">
-                                        <div class="feature feature-1">
-                                            <img alt="Image" src="img/oneCar.png" height=250px/>
-                                            <div class="feature__body boxed boxed--border">
-                                                <h5>London parking assessment</h5>
-                                                
-                                            </div>
-                                        </div>
-                                        <!--end feature-->
-                                    </li>
-                                </ul>
-                            </div>
-                            <!--end of row-->
-                        </div>
-                    </div>
-                    <!--end of row-->
-                </div>
-                <!--end of container-->
-            </section>
-            
+    // 如果高亮功能启用，对于非交互元素阻止默认行为和事件传播
+    if (highlightEnabled) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
+    console.log("Element clicked:", {
+      tagName: target.tagName,
+      selector: selector,
+      rect: rect
+    });
 
-            <footer class="footer-3 text-center-xs space--xs bg--dark ">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <img alt="Image" class="logo" src="img/logo-dark.png" />
-                            <ul class="list-inline list--hover">
-                                <li class="list-inline-item">
-                                    <a href="https://join.slack.com/t/bicyclize/shared_invite/enQtMzE0MzkwMjM4OTc3LTMzZWNhYWU4ZjU5NDhjMWM0MWQxYjU3YWEzZjUwZDRlZWM5OGIwZDYzNTRkODA2YWI1NGE1MWYzZTI2NzY0OGQ" target="_blank">
-                                        <span class="type--fine-print">Join the revolution</span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="#">
-                                        <span class="type--fine-print">info@bicyclize.com</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6 text-right text-center-xs">
-                            <ul class="social-list list-inline list--hover">
-                                
-                                <li class="list-inline-item">
-                                    <a href="https://twitter.com/bicyclize">
-                                        <i class="socicon socicon-twitter icon icon--xs"></i>
-                                    </a>
-                                </li>
-                                
-                                <li class="list-inline-item">
-                                    <a href="https://www.instagram.com/bicyclize">
-                                        <i class="socicon socicon-instagram icon icon--xs"></i>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="https://https://blog.bicyclize.com">
-                                        <i class="socicon socicon-medium icon icon--xs"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!--end of row-->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p class="type--fine-print">
-                                
-                            </p>
-                        </div>
-                        <div class="col-md-6 text-right text-center-xs">
-                            <span class="type--fine-print">&copy;
-                                <span class="update-year"></span> Bicyclize</span>
-                           <!--  <a class="type-fine-print" href="#">Privacy Policy</a>
-                            <a class="type-fine-print" href="#">Legal</a> -->
-                        </div>
-                    </div>
-                    <!--end of row-->
-                </div>
-                <!--end of container-->
-            </footer>
-        </div>
-        <!--<div class="loader"></div>-->
-        <a class="back-to-top inner-link" href="#start" data-scroll-class="100vh:active">
-            <i class="stack-interface stack-up-open-big"></i>
-        </a>
-        <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
-   
-        <script src="js/jquery-3.1.1.min.js"></script>
-        <script src="js/flickity.min.js"></script>
-        <script src="js/easypiechart.min.js"></script>
-        <script src="js/parallax.js"></script>
-        <script src="js/typed.min.js"></script>
-        <script src="js/datepicker.js"></script>
-        <script src="js/isotope.min.js"></script>
-        <script src="js/ytplayer.min.js"></script>
-        <script src="js/lightbox.min.js"></script>
-        <script src="js/granim.min.js"></script>
-        <script src="js/jquery.steps.min.js"></script>
-        <script src="js/countdown.min.js"></script>
-        <script src="js/twitterfetcher.min.js"></script>
-        <script src="js/spectragram.min.js"></script>
-        <script src="js/smooth-scroll.min.js"></script>
-        <script src="js/scripts.js"></script>
-    </body>
+    // 立即更新选中高亮
+    updateSelectedHighlight(target);
+
+    // 隐藏悬停高亮，因为现在是选中状态
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-click",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 监听来自父窗口的消息
+  function handleParentMessage(event) {
+    console.log("Received message from parent:", event.data);
+    if (event.data.type === "iframe-highlight-toggle") {
+      var enabled = event.data.enabled;
+      console.log("Highlight toggle:", enabled);
+      if (enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "enable-iframe-highlight") {
+      console.log("Enable iframe highlight");
+      enableHighlight();
+    } else if (event.data.type === "disable-iframe-highlight") {
+      console.log("Disable iframe highlight");
+      disableHighlight();
+    } else if (event.data.type === "toggle-iframe-highlight") {
+      var _enabled = event.data.enabled !== undefined ? event.data.enabled : !highlightEnabled;
+      console.log("Toggle iframe highlight to:", _enabled);
+      if (_enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "update-selected-element") {
+      var selector = event.data.selector;
+      console.log("Update selected element with selector:", selector);
+      if (selector) {
+        try {
+          var element = document.querySelector(selector);
+          console.log("Found element by selector:", element);
+          updateSelectedHighlight(element);
+        } catch (error) {
+          console.warn("Failed to select element:", error);
+          updateSelectedHighlight(null);
+        }
+      } else {
+        updateSelectedHighlight(null);
+      }
+    } else if (event.data.type === "clear-selected-element") {
+      console.log("Clear selected element");
+      updateSelectedHighlight(null);
+    }
+  }
+
+  // 启用高亮功能
+  function enableHighlight() {
+    console.log("Enabling highlight");
+    document.addEventListener("mouseover", handleMouseOver, true);
+    document.addEventListener("mouseout", handleMouseOut, true);
+    document.addEventListener("click", handleClick, true);
+    highlightEnabled = true;
+    overlay.style.display = "block";
+  }
+
+  // 禁用高亮功能
+  function disableHighlight() {
+    console.log("Disabling highlight");
+    highlightEnabled = false;
+    // 保持事件监听器，但通过 highlightEnabled 变量控制行为
+    // 这样可以保留选中状态的显示
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    // 不隐藏 selectedBox 和 selectedLabel，保留选中状态
+  }
+
+  // 完全禁用高亮功能（移除所有监听器）
+  function fullyDisableHighlight() {
+    console.log("Fully disabling highlight");
+    highlightEnabled = false;
+    document.removeEventListener("mouseover", handleMouseOver, true);
+    document.removeEventListener("mouseout", handleMouseOut, true);
+    document.removeEventListener("click", handleClick, true);
+    overlay.style.display = "none";
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    selectedBox.style.display = "none";
+    selectedLabel.style.display = "none";
+  }
+
+  // 添加事件监听
+  enableHighlight();
+  window.addEventListener("message", handleParentMessage);
+
+  // 暴露全局函数供外部调用
+  window.__iframeHighlightControl = {
+    enable: enableHighlight,
+    disable: disableHighlight,
+    fullyDisable: fullyDisableHighlight,
+    isEnabled: function isEnabled() {
+      return highlightEnabled;
+    },
+    getSelectedElement: function getSelectedElement() {
+      return selectedElement;
+    },
+    updateSelected: updateSelectedHighlight,
+    // 通过消息发送开关控制
+    sendToggleMessage: function sendToggleMessage(enabled) {
+      window.parent.postMessage({
+        type: 'iframe-highlight-status',
+        enabled: enabled || highlightEnabled,
+        source: 'iframe-highlight-injector'
+      }, '*');
+    }
+  };
+
+  // 通知父窗口脚本已加载
+  try {
+    window.parent.postMessage({
+      type: "iframe-highlight-ready",
+      data: {
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: Date.now()
+      },
+      source: "iframe-highlight-injector"
+    }, "*");
+  } catch (error) {
+    console.warn("无法发送就绪消息到父窗口:", error);
+  }
+
+  // 清理函数
+  window.__iframeHighlightCleanup = function () {
+    fullyDisableHighlight();
+    window.removeEventListener("message", handleParentMessage);
+    if (overlay.parentElement) {
+      overlay.parentElement.removeChild(overlay);
+    }
+    delete window.__iframeHighlightInitialized;
+    delete window.__iframeHighlightCleanup;
+  };
+})();
+
+</script>
+
+<script>
+/**
+ * Iframe 元素高亮注入脚本
+ * 需要在目标网站中引入此脚本来支持跨域 iframe 高亮功能
+ *
+ * 使用方法：
+ * 1. 将此脚本添加到目标网站的 HTML 中
+ * 2. 或通过浏览器扩展、用户脚本等方式注入
+ */
+
+(function () {
+  "use strict";
+
+  // 检查是否在 iframe 中
+  if (window.self === window.top) {
+    return; // 不在 iframe 中，不执行
+  }
+
+  // 检查是否已经初始化过
+  if (window.__iframeHighlightInitialized) {
+    return;
+  }
+  window.__iframeHighlightInitialized = true;
+  console.log("Iframe 高亮脚本已加载");
+
+  // 创建高亮覆盖层
+  var overlay = document.createElement("div");
+  overlay.id = "iframe-highlight-overlay";
+  overlay.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100vw;\n    height: 100vh;\n    pointer-events: none;\n    z-index: 999999;\n    overflow: hidden;\n  ";
+
+  // 创建悬停高亮框（虚线边框）
+  var highlightBox = document.createElement("div");
+  highlightBox.id = "iframe-highlight-box";
+  highlightBox.style.cssText = "\n    position: absolute;\n    border: 2px dashed #007AFF;\n    background: rgba(0, 122, 255, 0.08);\n    pointer-events: none;\n    display: none;\n    transition: all 0.1s ease;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);\n    border-radius: 2px;\n  ";
+
+  // 创建选中节点的常驻高亮框（实线边框）
+  var selectedBox = document.createElement("div");
+  selectedBox.id = "iframe-selected-box";
+  selectedBox.style.cssText = "\n    position: absolute;\n    border: 2px solid #007AFF;\n    pointer-events: none;\n    display: none;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 8px rgba(255, 107, 53, 0.4);\n    border-radius: 2px;\n    z-index: 1000000;\n  ";
+
+  // 创建悬停标签显示
+  var tagLabel = document.createElement("div");
+  tagLabel.id = "iframe-tag-label";
+  tagLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 2px 6px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 2px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000001;\n    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);\n    font-weight: 500;\n  ";
+
+  // 创建选中节点标签
+  var selectedLabel = document.createElement("div");
+  selectedLabel.id = "iframe-selected-label";
+  selectedLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 3px 8px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 3px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000002;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);\n    font-weight: 600;\n  ";
+  overlay.appendChild(highlightBox);
+  overlay.appendChild(selectedBox);
+  overlay.appendChild(tagLabel);
+  overlay.appendChild(selectedLabel);
+  document.body.appendChild(overlay);
+
+  // 存储当前选中的元素
+  var selectedElement = null;
+  var highlightEnabled = false;
+
+  // 更新选中元素的高亮显示
+  function updateSelectedHighlight(element) {
+    console.log("updateSelectedHighlight called with:", element);
+    if (!element) {
+      selectedBox.style.display = "none";
+      selectedLabel.style.display = "none";
+      selectedElement = null;
+      console.log("Cleared selected highlight");
+      return;
+    }
+    selectedElement = element;
+    var rect = element.getBoundingClientRect();
+    console.log("Selected element rect:", rect);
+
+    // 更新选中高亮框位置
+    selectedBox.style.display = "block";
+    selectedBox.style.left = "".concat(rect.left - 2, "px");
+    selectedBox.style.top = "".concat(rect.top - 2, "px");
+    selectedBox.style.width = "".concat(rect.width + 4, "px");
+    selectedBox.style.height = "".concat(rect.height + 4, "px");
+
+    // 更新选中标签位置和内容
+    selectedLabel.style.display = "block";
+    selectedLabel.textContent = "\u2713 <".concat(element.tagName.toLowerCase(), ">");
+
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 28;
+    var labelLeft = rect.left;
+
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 5) {
+      labelTop = rect.bottom + 5;
+    }
+
+    // 如果标签会超出右侧，向左调整
+    var labelWidth = selectedLabel.offsetWidth || 100; // 预估宽度
+    if (labelLeft + labelWidth > window.innerWidth - 10) {
+      labelLeft = window.innerWidth - labelWidth - 10;
+    }
+    selectedLabel.style.left = "".concat(Math.max(5, labelLeft), "px");
+    selectedLabel.style.top = "".concat(labelTop, "px");
+    console.log("Selected highlight positioned at:", {
+      left: selectedBox.style.left,
+      top: selectedBox.style.top,
+      width: selectedBox.style.width,
+      height: selectedBox.style.height
+    });
+  }
+  function getElementSelector(element) {
+    if (!(element instanceof Element)) throw new Error('Argument must be a DOM element');
+    var segments = [];
+    var current = element;
+    while (current !== document.documentElement) {
+      var selector = '';
+      // 优先检查唯一ID
+      if (current.id && document.querySelectorAll("#".concat(current.id)).length === 1) {
+        segments.unshift("#".concat(current.id));
+        break; // ID唯一，无需继续向上
+      }
+
+      // 生成类名选择器（取第一个有效类名）
+      var classes = Array.from(current.classList).filter(function (c) {
+        return !c.startsWith('js-');
+      });
+      var className = classes.length > 0 ? ".".concat(classes[0]) : '';
+
+      // 生成位置索引（nth-child）
+      var tag = current.tagName.toLowerCase();
+      if (!className) {
+        var siblings = Array.from(current.parentNode.children);
+        var index = siblings.findIndex(function (el) {
+          return el === current;
+        }) + 1;
+        selector = "".concat(tag, ":nth-child(").concat(index, ")");
+      } else {
+        selector = className;
+      }
+      segments.unshift(selector);
+      current = current.parentElement;
+    }
+
+    // 处理根元素
+    if (current === document.documentElement) {
+      segments.unshift('html');
+    }
+    return segments.join(' > ');
+  }
+
+  // 获取元素文本内容
+  function getElementText(element) {
+    var _element$textContent;
+    if (element.tagName === "INPUT") {
+      return element.value || element.placeholder || "";
+    }
+    if (element.tagName === "TEXTAREA") {
+      return element.value || element.placeholder || "";
+    }
+    var text = ((_element$textContent = element.textContent) === null || _element$textContent === void 0 ? void 0 : _element$textContent.trim()) || "";
+    return text.length > 50 ? text.substring(0, 50) + "..." : text;
+  }
+
+  // 获取元素属性信息
+  function getElementAttributes(element) {
+    var attrs = {};
+    for (var i = 0; i < element.attributes.length; i++) {
+      var attr = element.attributes[i];
+      attrs[attr.name] = attr.value;
+    }
+    return attrs;
+  }
+
+  // 鼠标悬停事件处理
+  function handleMouseOver(e) {
+    if (!highlightEnabled) return;
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
+
+    // 避免高亮 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
+
+    // 如果是已选中的元素，不显示悬停高亮
+    if (target === selectedElement) {
+      highlightBox.style.display = "none";
+      tagLabel.style.display = "none";
+      return;
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
+
+    // 更新悬停高亮框位置
+    highlightBox.style.display = "block";
+    highlightBox.style.left = "".concat(rect.left - 2, "px");
+    highlightBox.style.top = "".concat(rect.top - 2, "px");
+    highlightBox.style.width = "".concat(rect.width + 4, "px");
+    highlightBox.style.height = "".concat(rect.height + 4, "px");
+
+    // 更新标签位置和内容
+    tagLabel.style.display = "block";
+    tagLabel.textContent = "<".concat(target.tagName.toLowerCase(), ">");
+
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 22;
+    var labelLeft = rect.left;
+
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 0) {
+      labelTop = rect.bottom + 5;
+    }
+
+    // 如果标签会超出右侧，向左调整
+    if (labelLeft + tagLabel.offsetWidth > window.innerWidth) {
+      labelLeft = window.innerWidth - tagLabel.offsetWidth - 5;
+    }
+    tagLabel.style.left = "".concat(Math.max(0, labelLeft), "px");
+    tagLabel.style.top = "".concat(labelTop, "px");
+
+    // 发送消息到父窗口
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 鼠标离开事件处理
+  function handleMouseOut(e) {
+    if (!highlightEnabled) return;
+    var relatedTarget = e.relatedTarget;
+
+    // 如果鼠标移动到高亮相关元素上，不隐藏高亮
+    if (relatedTarget && (relatedTarget === highlightBox || relatedTarget === tagLabel || relatedTarget === overlay || relatedTarget === selectedBox || relatedTarget === selectedLabel)) {
+      return;
+    }
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: null,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 点击事件处理
+  function handleClick(e) {
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
+
+    // 避免处理 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
+
+    // 检查是否是交互元素，这些元素需要保留默认行为
+    var isInteractiveElement = ['input', 'textarea', 'select', 'button', 'a'].includes(target.tagName.toLowerCase());
+
+    // 如果高亮功能启用，对于非交互元素阻止默认行为和事件传播
+    if (highlightEnabled) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
+    console.log("Element clicked:", {
+      tagName: target.tagName,
+      selector: selector,
+      rect: rect
+    });
+
+    // 立即更新选中高亮
+    updateSelectedHighlight(target);
+
+    // 隐藏悬停高亮，因为现在是选中状态
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-click",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 监听来自父窗口的消息
+  function handleParentMessage(event) {
+    console.log("Received message from parent:", event.data);
+    if (event.data.type === "iframe-highlight-toggle") {
+      var enabled = event.data.enabled;
+      console.log("Highlight toggle:", enabled);
+      if (enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "enable-iframe-highlight") {
+      console.log("Enable iframe highlight");
+      enableHighlight();
+    } else if (event.data.type === "disable-iframe-highlight") {
+      console.log("Disable iframe highlight");
+      disableHighlight();
+    } else if (event.data.type === "toggle-iframe-highlight") {
+      var _enabled = event.data.enabled !== undefined ? event.data.enabled : !highlightEnabled;
+      console.log("Toggle iframe highlight to:", _enabled);
+      if (_enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "update-selected-element") {
+      var selector = event.data.selector;
+      console.log("Update selected element with selector:", selector);
+      if (selector) {
+        try {
+          var element = document.querySelector(selector);
+          console.log("Found element by selector:", element);
+          updateSelectedHighlight(element);
+        } catch (error) {
+          console.warn("Failed to select element:", error);
+          updateSelectedHighlight(null);
+        }
+      } else {
+        updateSelectedHighlight(null);
+      }
+    } else if (event.data.type === "clear-selected-element") {
+      console.log("Clear selected element");
+      updateSelectedHighlight(null);
+    }
+  }
+
+  // 启用高亮功能
+  function enableHighlight() {
+    console.log("Enabling highlight");
+    document.addEventListener("mouseover", handleMouseOver, true);
+    document.addEventListener("mouseout", handleMouseOut, true);
+    document.addEventListener("click", handleClick, true);
+    highlightEnabled = true;
+    overlay.style.display = "block";
+  }
+
+  // 禁用高亮功能
+  function disableHighlight() {
+    console.log("Disabling highlight");
+    highlightEnabled = false;
+    // 保持事件监听器，但通过 highlightEnabled 变量控制行为
+    // 这样可以保留选中状态的显示
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    // 不隐藏 selectedBox 和 selectedLabel，保留选中状态
+  }
+
+  // 完全禁用高亮功能（移除所有监听器）
+  function fullyDisableHighlight() {
+    console.log("Fully disabling highlight");
+    highlightEnabled = false;
+    document.removeEventListener("mouseover", handleMouseOver, true);
+    document.removeEventListener("mouseout", handleMouseOut, true);
+    document.removeEventListener("click", handleClick, true);
+    overlay.style.display = "none";
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    selectedBox.style.display = "none";
+    selectedLabel.style.display = "none";
+  }
+
+  // 添加事件监听
+  enableHighlight();
+  window.addEventListener("message", handleParentMessage);
+
+  // 暴露全局函数供外部调用
+  window.__iframeHighlightControl = {
+    enable: enableHighlight,
+    disable: disableHighlight,
+    fullyDisable: fullyDisableHighlight,
+    isEnabled: function isEnabled() {
+      return highlightEnabled;
+    },
+    getSelectedElement: function getSelectedElement() {
+      return selectedElement;
+    },
+    updateSelected: updateSelectedHighlight,
+    // 通过消息发送开关控制
+    sendToggleMessage: function sendToggleMessage(enabled) {
+      window.parent.postMessage({
+        type: 'iframe-highlight-status',
+        enabled: enabled || highlightEnabled,
+        source: 'iframe-highlight-injector'
+      }, '*');
+    }
+  };
+
+  // 通知父窗口脚本已加载
+  try {
+    window.parent.postMessage({
+      type: "iframe-highlight-ready",
+      data: {
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: Date.now()
+      },
+      source: "iframe-highlight-injector"
+    }, "*");
+  } catch (error) {
+    console.warn("无法发送就绪消息到父窗口:", error);
+  }
+
+  // 清理函数
+  window.__iframeHighlightCleanup = function () {
+    fullyDisableHighlight();
+    window.removeEventListener("message", handleParentMessage);
+    if (overlay.parentElement) {
+      overlay.parentElement.removeChild(overlay);
+    }
+    delete window.__iframeHighlightInitialized;
+    delete window.__iframeHighlightCleanup;
+  };
+})();
+
+</script>
+
+<script>
+/**
+ * Iframe 元素高亮注入脚本
+ * 需要在目标网站中引入此脚本来支持跨域 iframe 高亮功能
+ *
+ * 使用方法：
+ * 1. 将此脚本添加到目标网站的 HTML 中
+ * 2. 或通过浏览器扩展、用户脚本等方式注入
+ */
+
+(function () {
+  "use strict";
+
+  // 检查是否在 iframe 中
+  if (window.self === window.top) {
+    return; // 不在 iframe 中，不执行
+  }
+
+  // 检查是否已经初始化过
+  if (window.__iframeHighlightInitialized) {
+    return;
+  }
+  window.__iframeHighlightInitialized = true;
+  console.log("Iframe 高亮脚本已加载");
+
+  // 创建高亮覆盖层
+  var overlay = document.createElement("div");
+  overlay.id = "iframe-highlight-overlay";
+  overlay.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100vw;\n    height: 100vh;\n    pointer-events: none;\n    z-index: 999999;\n    overflow: hidden;\n  ";
+
+  // 创建悬停高亮框（虚线边框）
+  var highlightBox = document.createElement("div");
+  highlightBox.id = "iframe-highlight-box";
+  highlightBox.style.cssText = "\n    position: absolute;\n    border: 2px dashed #007AFF;\n    background: rgba(0, 122, 255, 0.08);\n    pointer-events: none;\n    display: none;\n    transition: all 0.1s ease;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);\n    border-radius: 2px;\n  ";
+
+  // 创建选中节点的常驻高亮框（实线边框）
+  var selectedBox = document.createElement("div");
+  selectedBox.id = "iframe-selected-box";
+  selectedBox.style.cssText = "\n    position: absolute;\n    border: 2px solid #007AFF;\n    pointer-events: none;\n    display: none;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 8px rgba(255, 107, 53, 0.4);\n    border-radius: 2px;\n    z-index: 1000000;\n  ";
+
+  // 创建悬停标签显示
+  var tagLabel = document.createElement("div");
+  tagLabel.id = "iframe-tag-label";
+  tagLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 2px 6px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 2px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000001;\n    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);\n    font-weight: 500;\n  ";
+
+  // 创建选中节点标签
+  var selectedLabel = document.createElement("div");
+  selectedLabel.id = "iframe-selected-label";
+  selectedLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 3px 8px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 3px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000002;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);\n    font-weight: 600;\n  ";
+  overlay.appendChild(highlightBox);
+  overlay.appendChild(selectedBox);
+  overlay.appendChild(tagLabel);
+  overlay.appendChild(selectedLabel);
+  document.body.appendChild(overlay);
+
+  // 存储当前选中的元素
+  var selectedElement = null;
+  var highlightEnabled = false;
+
+  // 更新选中元素的高亮显示
+  function updateSelectedHighlight(element) {
+    console.log("updateSelectedHighlight called with:", element);
+    if (!element) {
+      selectedBox.style.display = "none";
+      selectedLabel.style.display = "none";
+      selectedElement = null;
+      console.log("Cleared selected highlight");
+      return;
+    }
+    selectedElement = element;
+    var rect = element.getBoundingClientRect();
+    console.log("Selected element rect:", rect);
+
+    // 更新选中高亮框位置
+    selectedBox.style.display = "block";
+    selectedBox.style.left = "".concat(rect.left - 2, "px");
+    selectedBox.style.top = "".concat(rect.top - 2, "px");
+    selectedBox.style.width = "".concat(rect.width + 4, "px");
+    selectedBox.style.height = "".concat(rect.height + 4, "px");
+
+    // 更新选中标签位置和内容
+    selectedLabel.style.display = "block";
+    selectedLabel.textContent = "\u2713 <".concat(element.tagName.toLowerCase(), ">");
+
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 28;
+    var labelLeft = rect.left;
+
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 5) {
+      labelTop = rect.bottom + 5;
+    }
+
+    // 如果标签会超出右侧，向左调整
+    var labelWidth = selectedLabel.offsetWidth || 100; // 预估宽度
+    if (labelLeft + labelWidth > window.innerWidth - 10) {
+      labelLeft = window.innerWidth - labelWidth - 10;
+    }
+    selectedLabel.style.left = "".concat(Math.max(5, labelLeft), "px");
+    selectedLabel.style.top = "".concat(labelTop, "px");
+    console.log("Selected highlight positioned at:", {
+      left: selectedBox.style.left,
+      top: selectedBox.style.top,
+      width: selectedBox.style.width,
+      height: selectedBox.style.height
+    });
+  }
+  function getElementSelector(element) {
+    if (!(element instanceof Element)) throw new Error('Argument must be a DOM element');
+    var segments = [];
+    var current = element;
+    while (current !== document.documentElement) {
+      var selector = '';
+      // 优先检查唯一ID
+      if (current.id && document.querySelectorAll("#".concat(current.id)).length === 1) {
+        segments.unshift("#".concat(current.id));
+        break; // ID唯一，无需继续向上
+      }
+
+      // 生成类名选择器（取第一个有效类名）
+      var classes = Array.from(current.classList).filter(function (c) {
+        return !c.startsWith('js-');
+      });
+      var className = classes.length > 0 ? ".".concat(classes[0]) : '';
+
+      // 生成位置索引（nth-child）
+      var tag = current.tagName.toLowerCase();
+      if (!className) {
+        var siblings = Array.from(current.parentNode.children);
+        var index = siblings.findIndex(function (el) {
+          return el === current;
+        }) + 1;
+        selector = "".concat(tag, ":nth-child(").concat(index, ")");
+      } else {
+        selector = className;
+      }
+      segments.unshift(selector);
+      current = current.parentElement;
+    }
+
+    // 处理根元素
+    if (current === document.documentElement) {
+      segments.unshift('html');
+    }
+    return segments.join(' > ');
+  }
+
+  // 获取元素文本内容
+  function getElementText(element) {
+    var _element$textContent;
+    if (element.tagName === "INPUT") {
+      return element.value || element.placeholder || "";
+    }
+    if (element.tagName === "TEXTAREA") {
+      return element.value || element.placeholder || "";
+    }
+    var text = ((_element$textContent = element.textContent) === null || _element$textContent === void 0 ? void 0 : _element$textContent.trim()) || "";
+    return text.length > 50 ? text.substring(0, 50) + "..." : text;
+  }
+
+  // 获取元素属性信息
+  function getElementAttributes(element) {
+    var attrs = {};
+    for (var i = 0; i < element.attributes.length; i++) {
+      var attr = element.attributes[i];
+      attrs[attr.name] = attr.value;
+    }
+    return attrs;
+  }
+
+  // 鼠标悬停事件处理
+  function handleMouseOver(e) {
+    if (!highlightEnabled) return;
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
+
+    // 避免高亮 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
+
+    // 如果是已选中的元素，不显示悬停高亮
+    if (target === selectedElement) {
+      highlightBox.style.display = "none";
+      tagLabel.style.display = "none";
+      return;
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
+
+    // 更新悬停高亮框位置
+    highlightBox.style.display = "block";
+    highlightBox.style.left = "".concat(rect.left - 2, "px");
+    highlightBox.style.top = "".concat(rect.top - 2, "px");
+    highlightBox.style.width = "".concat(rect.width + 4, "px");
+    highlightBox.style.height = "".concat(rect.height + 4, "px");
+
+    // 更新标签位置和内容
+    tagLabel.style.display = "block";
+    tagLabel.textContent = "<".concat(target.tagName.toLowerCase(), ">");
+
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 22;
+    var labelLeft = rect.left;
+
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 0) {
+      labelTop = rect.bottom + 5;
+    }
+
+    // 如果标签会超出右侧，向左调整
+    if (labelLeft + tagLabel.offsetWidth > window.innerWidth) {
+      labelLeft = window.innerWidth - tagLabel.offsetWidth - 5;
+    }
+    tagLabel.style.left = "".concat(Math.max(0, labelLeft), "px");
+    tagLabel.style.top = "".concat(labelTop, "px");
+
+    // 发送消息到父窗口
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 鼠标离开事件处理
+  function handleMouseOut(e) {
+    if (!highlightEnabled) return;
+    var relatedTarget = e.relatedTarget;
+
+    // 如果鼠标移动到高亮相关元素上，不隐藏高亮
+    if (relatedTarget && (relatedTarget === highlightBox || relatedTarget === tagLabel || relatedTarget === overlay || relatedTarget === selectedBox || relatedTarget === selectedLabel)) {
+      return;
+    }
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: null,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 点击事件处理
+  function handleClick(e) {
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
+
+    // 避免处理 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
+
+    // 检查是否是交互元素，这些元素需要保留默认行为
+    var isInteractiveElement = ['input', 'textarea', 'select', 'button', 'a'].includes(target.tagName.toLowerCase());
+
+    // 如果高亮功能启用，对于非交互元素阻止默认行为和事件传播
+    if (highlightEnabled) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
+    console.log("Element clicked:", {
+      tagName: target.tagName,
+      selector: selector,
+      rect: rect
+    });
+
+    // 立即更新选中高亮
+    updateSelectedHighlight(target);
+
+    // 隐藏悬停高亮，因为现在是选中状态
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-click",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 监听来自父窗口的消息
+  function handleParentMessage(event) {
+    console.log("Received message from parent:", event.data);
+    if (event.data.type === "iframe-highlight-toggle") {
+      var enabled = event.data.enabled;
+      console.log("Highlight toggle:", enabled);
+      if (enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "enable-iframe-highlight") {
+      console.log("Enable iframe highlight");
+      enableHighlight();
+    } else if (event.data.type === "disable-iframe-highlight") {
+      console.log("Disable iframe highlight");
+      disableHighlight();
+    } else if (event.data.type === "toggle-iframe-highlight") {
+      var _enabled = event.data.enabled !== undefined ? event.data.enabled : !highlightEnabled;
+      console.log("Toggle iframe highlight to:", _enabled);
+      if (_enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "update-selected-element") {
+      var selector = event.data.selector;
+      console.log("Update selected element with selector:", selector);
+      if (selector) {
+        try {
+          var element = document.querySelector(selector);
+          console.log("Found element by selector:", element);
+          updateSelectedHighlight(element);
+        } catch (error) {
+          console.warn("Failed to select element:", error);
+          updateSelectedHighlight(null);
+        }
+      } else {
+        updateSelectedHighlight(null);
+      }
+    } else if (event.data.type === "clear-selected-element") {
+      console.log("Clear selected element");
+      updateSelectedHighlight(null);
+    }
+  }
+
+  // 启用高亮功能
+  function enableHighlight() {
+    console.log("Enabling highlight");
+    document.addEventListener("mouseover", handleMouseOver, true);
+    document.addEventListener("mouseout", handleMouseOut, true);
+    document.addEventListener("click", handleClick, true);
+    highlightEnabled = true;
+    overlay.style.display = "block";
+  }
+
+  // 禁用高亮功能
+  function disableHighlight() {
+    console.log("Disabling highlight");
+    highlightEnabled = false;
+    // 保持事件监听器，但通过 highlightEnabled 变量控制行为
+    // 这样可以保留选中状态的显示
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    // 不隐藏 selectedBox 和 selectedLabel，保留选中状态
+  }
+
+  // 完全禁用高亮功能（移除所有监听器）
+  function fullyDisableHighlight() {
+    console.log("Fully disabling highlight");
+    highlightEnabled = false;
+    document.removeEventListener("mouseover", handleMouseOver, true);
+    document.removeEventListener("mouseout", handleMouseOut, true);
+    document.removeEventListener("click", handleClick, true);
+    overlay.style.display = "none";
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    selectedBox.style.display = "none";
+    selectedLabel.style.display = "none";
+  }
+
+  // 添加事件监听
+  enableHighlight();
+  window.addEventListener("message", handleParentMessage);
+
+  // 暴露全局函数供外部调用
+  window.__iframeHighlightControl = {
+    enable: enableHighlight,
+    disable: disableHighlight,
+    fullyDisable: fullyDisableHighlight,
+    isEnabled: function isEnabled() {
+      return highlightEnabled;
+    },
+    getSelectedElement: function getSelectedElement() {
+      return selectedElement;
+    },
+    updateSelected: updateSelectedHighlight,
+    // 通过消息发送开关控制
+    sendToggleMessage: function sendToggleMessage(enabled) {
+      window.parent.postMessage({
+        type: 'iframe-highlight-status',
+        enabled: enabled || highlightEnabled,
+        source: 'iframe-highlight-injector'
+      }, '*');
+    }
+  };
+
+  // 通知父窗口脚本已加载
+  try {
+    window.parent.postMessage({
+      type: "iframe-highlight-ready",
+      data: {
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: Date.now()
+      },
+      source: "iframe-highlight-injector"
+    }, "*");
+  } catch (error) {
+    console.warn("无法发送就绪消息到父窗口:", error);
+  }
+
+  // 清理函数
+  window.__iframeHighlightCleanup = function () {
+    fullyDisableHighlight();
+    window.removeEventListener("message", handleParentMessage);
+    if (overlay.parentElement) {
+      overlay.parentElement.removeChild(overlay);
+    }
+    delete window.__iframeHighlightInitialized;
+    delete window.__iframeHighlightCleanup;
+  };
+})();
+
+</script>
+</body>
 </html>
