@@ -47,6 +47,8 @@
   .navl{position:relative;transition:color .3s}
   .navl::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:2px;background:#22c55e;transition:width .3s}
   .navl:hover::after{width:100%}
+  #siteHeader{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:background .35s ease,border-color .35s ease}
+  #siteHeader.scrolled{background:rgba(6,15,9,.8);border-bottom:1px solid rgba(255,255,255,.08)}
   .step-n{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.9rem;flex-shrink:0;box-shadow:0 8px 20px rgba(34,197,94,.3)}
   .bdg{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .7rem;border-radius:9999px;display:inline-block}
   .done{background:#dcfce7;color:#166534}
@@ -223,7 +225,7 @@
 }" class="font-sans text-gray-900 bg-white">
 
 <!-- ═══ NAV ═══ -->
-<header class="fixed top-0 inset-x-0 z-50 bg-dk-950/95 backdrop-blur-md border-b border-white/5">
+<header id="siteHeader" class="fixed top-0 inset-x-0 z-50">
   <nav class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
     <a href="#" class="flex items-center gap-2 text-white font-bold text-lg no-underline">
       <span class="text-2xl">🚲</span><span>Bicyclize</span>
@@ -1075,6 +1077,15 @@
   document.addEventListener('DOMContentLoaded', function() {
     AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 });
   });
+
+  // Header: see-through at top → translucent on scroll
+  var siteHeader = document.getElementById('siteHeader');
+  function onHeaderScroll(){
+    if (window.scrollY > 40) siteHeader.classList.add('scrolled');
+    else siteHeader.classList.remove('scrolled');
+  }
+  window.addEventListener('scroll', onHeaderScroll, {passive:true});
+  onHeaderScroll();
 
   // Mapbox GL — Monochrome style + office marker
   document.addEventListener('DOMContentLoaded', function() {
