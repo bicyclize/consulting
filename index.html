@@ -9,8 +9,6 @@
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <script>
   tailwind.config = {
@@ -44,7 +42,6 @@
   .a1{animation:fu .8s ease both}.a2{animation:fu .8s .15s ease both}.a3{animation:fu .8s .3s ease both}
   input,textarea{transition:border-color .3s,box-shadow .3s;width:100%;padding:.75rem 1rem;border:1.5px solid #e5e7eb;border-radius:.75rem;font-family:inherit;font-size:.95rem;background:#fff}
   input:focus,textarea:focus{outline:none;border-color:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.12)}
-  #map{z-index:1}
   .navl{position:relative;transition:color .3s}
   .navl::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:2px;background:#22c55e;transition:width .3s}
   .navl:hover::after{width:100%}
@@ -109,9 +106,9 @@
       gcaps:['Network connectivity analysis','Geographic Weighted Regression (GWR)','Cycling potential and demand modelling','Catchment area and accessibility mapping','Traffic flow modelling and simulation','Custom interactive web maps'],
       stats:[{n:'10+',l:'Projects delivered'},{n:'6',l:'Budapest districts'},{n:'5+',l:'Years experience'},{n:'EU',l:'Funded projects'}],
       sl5:'Get in touch', sh5:'Start a conversation.',
-      ss5:'Tell us about your project. We respond within one working day.',
+      ss5:'Tell us about your project. We respond within 5 working days.',
       flabel:'Name', elabel:'Email', mlabel:'Message', send:'Send message',
-      addr:'Budapest, Andrássy út 79, 1062 Hungary', eml:'info@varosmobilitas.hu',
+      addr:'Budapest, Andrássy út 79, 1062 Hungary', eml:'info@bicyclize.com',
       ptitle:'Privacy Policy', ttitle:'Terms of Service', ftag:'Urban Mobility Consultancy',
       label:'Liveable Main Streets · the method',
       h1:'Main streets, rebuilt without cutting capacity.',
@@ -188,9 +185,9 @@
       gcaps:['Hálózati összefüggőség-elemzés','Geografikusan súlyozott regresszió (GWR)','Kerékpározási potenciál és kereslet modellezés','Vonzáskörzet és elérhetőségi térképezés','Forgalomáramlás modellezés és szimuláció','Egyedi interaktív webtérképek'],
       stats:[{n:'10+',l:'Leszállított projekt'},{n:'6',l:'Budapesti kerület'},{n:'5+',l:'Év tapasztalat'},{n:'EU',l:'Finanszírozott projektek'}],
       sl5:'Kapcsolat', sh5:'Kezdjünk egy párbeszédet.',
-      ss5:'Mesélje el projektjét. Egy munkanapon belül válaszolunk.',
+      ss5:'Mesélje el projektjét. 5 munkanapon belül válaszolunk.',
       flabel:'Neve', elabel:'E-mail cím', mlabel:'Üzenet', send:'Üzenet küldése',
-      addr:'Budapest, Andrássy út 79, 1062', eml:'info@varosmobilitas.hu',
+      addr:'Budapest, Andrássy út 79, 1062', eml:'info@bicyclize.com',
       ptitle:'Adatvédelmi Irányelvek', ttitle:'Felhasználási Feltételek', ftag:'Városi Mobilitás Tanácsadó',
       label:'Élhető Főutak · a módszer',
       h1:'Főutak, újraépítve kapacitásvesztés nélkül.',
@@ -965,10 +962,11 @@
           <a :href="'mailto:'+L.eml" x-text="L.eml" class="text-sm text-forest-600 font-medium no-underline hover:text-forest-500"></a>
         </div>
       </div>
-      <div id="map" class="h-64 rounded-2xl shadow-md"></div>
+      <iframe width="100%" height="400px" class="rounded-2xl shadow-md" style="border:none;" title="Monochrome"
+        src="https://api.mapbox.com/styles/v1/bicyclize/ckwow6vcf8hli15nvze3fvrej.html?title=false&amp;access_token=pk.eyJ1IjoiYmljeWNsaXplIiwiYSI6IjMxY2M0MWUxMTZiYmFlOWI1MzYxM2ZjZjdiMzY5ZDNhIn0.JDGA4CwRPNqPLUYrOlcCnQ&amp;zoomwheel=false#15.31/47.495108/19.078364"></iframe>
     </div>
     <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-left">
-      <form action="https://formspree.io/f/info@varosmobilitas.hu" method="POST" class="space-y-5">
+      <form action="https://formspree.io/f/info@bicyclize.com" method="POST" class="space-y-5">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2" x-text="L.flabel"></label>
           <input type="text" name="name" :placeholder="L.flabel" required>
@@ -1028,7 +1026,7 @@
     <h1 x-text="L.ptitle" class="text-3xl font-extrabold text-gray-900 mb-2"></h1>
     <p class="text-gray-500 text-sm mb-8" x-text="lang==='en'?'Last updated: March 2026':'Utoljára módosítva: 2026. március'"></p>
     <div class="space-y-6 text-gray-600 text-sm leading-relaxed">
-      <p x-text="lang==='en'?'Bicyclize (operated by Város és Mobilitás Intézet Non-Profit Kft., Andrássy út 79, Budapest 1062, info@varosmobilitas.hu) collects only the personal data necessary to respond to enquiries and deliver services.':'A Bicyclize (üzemeltető: Város és Mobilitás Intézet Non-Profit Kft., 1062 Budapest, Andrássy út 79, info@varosmobilitas.hu) csak az érdeklődések megválaszolásához és a szolgáltatások nyújtásához szükséges személyes adatokat gyűjti.'"></p>
+      <p x-text="lang==='en'?'Bicyclize (operated by Város és Mobilitás Intézet Non-Profit Kft., Andrássy út 79, Budapest 1062, info@bicyclize.com) collects only the personal data necessary to respond to enquiries and deliver services.':'A Bicyclize (üzemeltető: Város és Mobilitás Intézet Non-Profit Kft., 1062 Budapest, Andrássy út 79, info@bicyclize.com) csak az érdeklődések megválaszolásához és a szolgáltatások nyújtásához szükséges személyes adatokat gyűjti.'"></p>
       <div>
         <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Data we collect':'Gyűjtött adatok'"></h2>
         <ul class="list-disc pl-5 space-y-1">
@@ -1039,7 +1037,7 @@
       </div>
       <div>
         <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Your rights':'Az Ön jogai'"></h2>
-        <p x-text="lang==='en'?'Under GDPR you have the right to access, rectify, erase, and object to processing of your personal data. Contact us at info@varosmobilitas.hu.':'A GDPR alapján Ön jogosult hozzáférni, helyesbíteni, töröltetni és tiltakozni a személyes adatai kezelése ellen. Lépjen kapcsolatba velünk: info@varosmobilitas.hu.'"></p>
+        <p x-text="lang==='en'?'Under GDPR you have the right to access, rectify, erase, and object to processing of your personal data. Contact us at info@bicyclize.com.':'A GDPR alapján Ön jogosult hozzáférni, helyesbíteni, töröltetni és tiltakozni a személyes adatai kezelése ellen. Lépjen kapcsolatba velünk: info@bicyclize.com.'"></p>
       </div>
       <div>
         <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Data storage':'Adattárolás'"></h2>
@@ -1077,27 +1075,6 @@
   // AOS init
   document.addEventListener('DOMContentLoaded', function() {
     AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 });
-  });
-
-  // Leaflet map — runs after DOM ready
-  document.addEventListener('DOMContentLoaded', function() {
-    try {
-      var map = L.map('map', { zoomControl: true, scrollWheelZoom: false })
-        .setView([47.5013, 19.0617], 14);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 19
-      }).addTo(map);
-      var greenIcon = L.divIcon({
-        className: '',
-        html: '<div style="width:36px;height:36px;background:#22c55e;border:3px solid #fff;border-radius:50%;box-shadow:0 4px 12px rgba(34,197,94,.4);display:flex;align-items:center;justify-content:center;font-size:16px;">🚲</div>',
-        iconSize: [36,36], iconAnchor: [18,18]
-      });
-      L.marker([47.5013, 19.0617], {icon: greenIcon})
-        .addTo(map)
-        .bindPopup('<strong>Bicyclize</strong><br>Andrássy út 79<br>Budapest, 1062')
-        .openPopup();
-    } catch(e) { console.warn('Map init failed:', e); }
   });
 </script>
 
