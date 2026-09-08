@@ -120,7 +120,7 @@
       insightd:'A 1+1 roundabout carries the same traffic as a 2+1 signalised junction. Redesign the junction, free the lane — capacity stays, safety and liveability rise.',
       before:'Before', after:'After',
       bcap:'2×2 signalised junction — four through lanes, no cycle space, narrow footways, no greenery.',
-      acap:'Dutch-style protected roundabout — one lane each way, a cycle-path ring separated from traffic by a planted buffer, priority crossings for cyclists, wide zebras.',
+      acap:'Dutch-style protected roundabout — one lane each way, a cycle-path ring separated from traffic by a planted buffer, protected bike lanes on every approach, wide zebras.',
       xsTitle:'One street, reallocated — not widened',
       xsLead:'The cross-section doesn\u2019t get any wider. The second lane in each direction becomes protected cycling and greenery.',
       xsBefore:'Today: 4 through lanes', xsAfter:'After: 2 lanes + cycle track + greenery',
@@ -198,7 +198,7 @@
       insightd:'Egy 1+1-es körforgalom ugyanannyi forgalmat visz át, mint egy 2+1-es jelzőlámpás csomópont. Alakítsd át a csomópontot, szabadítsd fel a sávot — a kapacitás megmarad, a biztonság és az élhetőség nő.',
       before:'Előtte', after:'Utána',
       bcap:'2×2 jelzőlámpás csomópont — négy átmenő sáv, kerékpársáv nélkül, keskeny járdák, zöldfelület nélkül.',
-      acap:'Holland típusú védett körforgalom — irányonként egy sáv, növényzettel elválasztott kerékpárút-gyűrű, elsőbbségi kerékpáros-átvezetések, széles zebrák.',
+      acap:'Holland típusú védett körforgalom — irányonként egy sáv, növényzettel elválasztott kerékpárút-gyűrű, védett kerékpársávok minden bevezető úton, széles zebrák.',
       xsTitle:'Egy utca, újraosztva — nem kiszélesítve',
       xsLead:'A keresztmetszet nem lesz szélesebb. A második sáv mindkét irányban védett kerékpározássá és zöldfelületté alakul.',
       xsBefore:'Ma: 4 átmenő sáv', xsAfter:'Utána: 2 sáv + kerékpársáv + zöldfelület',
@@ -447,89 +447,70 @@
             <rect x="222" y="222" width="98" height="42" rx="3"/>
             <rect x="222" y="278" width="98" height="40" rx="3"/>
           </g>
-          <!-- footway ring -->
-          <circle cx="170" cy="170" r="72" fill="none" stroke="#23312b" stroke-width="8"/>
-          <!-- protected cycle path ring -->
-          <circle cx="170" cy="170" r="60" fill="none" stroke="#22c55e" stroke-width="12"/>
-          <!-- buffer verge ring (separates carriageway from cycle path) -->
-          <circle cx="170" cy="170" r="49" fill="none" stroke="#166534" stroke-width="10"/>
-          <!-- approach arms (1+1) -->
-          <rect x="154" y="0" width="32" height="126" fill="#33414d"/>
-          <rect x="154" y="214" width="32" height="126" fill="#33414d"/>
-          <rect x="0" y="154" width="126" height="32" fill="#33414d"/>
-          <rect x="214" y="154" width="126" height="32" fill="#33414d"/>
-          <!-- approach centre dashes (stop at splitter) -->
-          <g stroke="#9fb0bd" stroke-width="2" stroke-dasharray="9 7">
-            <line x1="170" y1="0" x2="170" y2="116"/>
-            <line x1="170" y1="224" x2="170" y2="340"/>
-            <line x1="0" y1="170" x2="116" y2="170"/>
-            <line x1="224" y1="170" x2="340" y2="170"/>
+          <!-- approach footways (kerbs at the same place as the signalised graphic) -->
+          <g fill="#23312b">
+            <rect x="136" y="0" width="6" height="340"/>
+            <rect x="198" y="0" width="6" height="340"/>
+            <rect x="0" y="136" width="340" height="6"/>
+            <rect x="0" y="198" width="340" height="6"/>
           </g>
-          <!-- circulating carriageway (single lane, no lane stripes) -->
-          <circle cx="170" cy="170" r="44" fill="#33414d"/>
-          <!-- central island -->
-          <circle cx="170" cy="170" r="28" fill="#16a34a"/>
-          <!-- island trees -->
-          <g>
-            <circle cx="158" cy="160" r="5.5" fill="#14532d"/><circle cx="158" cy="160" r="2" fill="#166534"/>
-            <circle cx="182" cy="160" r="5.5" fill="#14532d"/><circle cx="182" cy="160" r="2" fill="#166534"/>
-            <circle cx="170" cy="184" r="5.5" fill="#14532d"/><circle cx="170" cy="184" r="2" fill="#166534"/>
+          <!-- approach cycle tracks (protected bike lanes) -->
+          <g fill="#22c55e">
+            <rect x="142" y="0" width="6" height="340"/>
+            <rect x="192" y="0" width="6" height="340"/>
+            <rect x="0" y="142" width="340" height="6"/>
+            <rect x="0" y="192" width="340" height="6"/>
           </g>
-          <!-- splitter islands -->
+          <!-- approach buffer verges -->
           <g fill="#166534">
-            <rect x="166" y="116" width="8" height="10" rx="2"/>
-            <rect x="166" y="214" width="8" height="10" rx="2"/>
-            <rect x="116" y="166" width="10" height="8" rx="2"/>
-            <rect x="214" y="166" width="10" height="8" rx="2"/>
+            <rect x="148" y="0" width="6" height="340"/>
+            <rect x="186" y="0" width="6" height="340"/>
+            <rect x="0" y="148" width="340" height="6"/>
+            <rect x="0" y="186" width="340" height="6"/>
           </g>
-          <!-- cycle crossings (protected path crosses each arm) -->
-          <g>
-            <rect x="154" y="104" width="32" height="12" fill="#22c55e"/>
-            <rect x="154" y="224" width="32" height="12" fill="#22c55e"/>
-            <rect x="104" y="154" width="12" height="32" fill="#22c55e"/>
-            <rect x="224" y="154" width="12" height="32" fill="#22c55e"/>
+          <!-- approach carriageways (1+1) -->
+          <g fill="#33414d">
+            <rect x="154" y="0" width="32" height="340"/>
+            <rect x="0" y="154" width="340" height="32"/>
           </g>
-          <!-- cycle crossing edge dashes -->
-          <g stroke="#fff" stroke-width="1.5" stroke-dasharray="3 3">
-            <line x1="154" y1="104" x2="186" y2="104"/><line x1="154" y1="116" x2="186" y2="116"/>
-            <line x1="154" y1="224" x2="186" y2="224"/><line x1="154" y1="236" x2="186" y2="236"/>
-            <line x1="104" y1="154" x2="104" y2="186"/><line x1="116" y1="154" x2="116" y2="186"/>
-            <line x1="224" y1="154" x2="224" y2="186"/><line x1="236" y1="154" x2="236" y2="186"/>
+          <!-- centre lines (stop at the roundabout) -->
+          <g stroke="#e8c96a" stroke-width="2.5">
+            <line x1="170" y1="0" x2="170" y2="154"/>
+            <line x1="170" y1="186" x2="170" y2="340"/>
+            <line x1="0" y1="170" x2="154" y2="170"/>
+            <line x1="186" y1="170" x2="340" y2="170"/>
           </g>
-          <!-- shark teeth: cars yield to cyclists -->
-          <g fill="#fff">
-            <path d="M160 100 l3 -3 l3 3 z"/><path d="M170 100 l3 -3 l3 3 z"/><path d="M180 100 l3 -3 l3 3 z"/>
-            <path d="M160 240 l3 3 l3 -3 z"/><path d="M170 240 l3 3 l3 -3 z"/><path d="M180 240 l3 3 l3 -3 z"/>
-            <path d="M100 160 l-3 -3 l-3 3 z"/><path d="M100 170 l-3 -3 l-3 3 z"/><path d="M100 180 l-3 -3 l-3 3 z"/>
-            <path d="M240 160 l3 -3 l3 3 z"/><path d="M240 170 l3 -3 l3 3 z"/><path d="M240 180 l3 -3 l3 3 z"/>
-          </g>
-          <!-- zebra crossings (pedestrians, outside cycle path) -->
-          <g fill="#fff">
-            <rect x="158" y="94" width="6" height="8"/><rect x="168" y="94" width="6" height="8"/><rect x="178" y="94" width="6" height="8"/>
-            <rect x="158" y="238" width="6" height="8"/><rect x="168" y="238" width="6" height="8"/><rect x="178" y="238" width="6" height="8"/>
-            <rect x="94" y="158" width="8" height="6"/><rect x="94" y="168" width="8" height="6"/><rect x="94" y="178" width="8" height="6"/>
-            <rect x="238" y="158" width="8" height="6"/><rect x="238" y="168" width="8" height="6"/><rect x="238" y="178" width="8" height="6"/>
-          </g>
-          <!-- verge trees (diagonal quadrants) -->
-          <g>
-            <circle cx="135" cy="135" r="4.5" fill="#14532d"/><circle cx="135" cy="135" r="1.7" fill="#16a34a"/>
-            <circle cx="205" cy="135" r="4.5" fill="#14532d"/><circle cx="205" cy="135" r="1.7" fill="#16a34a"/>
-            <circle cx="135" cy="205" r="4.5" fill="#14532d"/><circle cx="135" cy="205" r="1.7" fill="#16a34a"/>
-            <circle cx="205" cy="205" r="4.5" fill="#14532d"/><circle cx="205" cy="205" r="1.7" fill="#16a34a"/>
-          </g>
-          <!-- bike glyphs on the cycle ring -->
+          <!-- roundabout rings (largest first) -->
+          <circle cx="170" cy="170" r="34" fill="#23312b"/>
+          <circle cx="170" cy="170" r="28" fill="#22c55e"/>
+          <circle cx="170" cy="170" r="22" fill="#166534"/>
+          <circle cx="170" cy="170" r="16" fill="#33414d"/>
+          <circle cx="170" cy="170" r="8" fill="#16a34a"/>
+          <!-- island tree -->
+          <circle cx="170" cy="170" r="4" fill="#14532d"/>
+          <circle cx="170" cy="170" r="1.6" fill="#166534"/>
+          <!-- bike glyphs (ring + approaches) -->
           <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
-            <g transform="translate(128,128)">
-              <circle cx="0" cy="0" r="3"/><circle cx="8" cy="0" r="3"/><path d="M0 0 L4 -4 L8 0 M4 -4 L4 0"/>
-            </g>
-            <g transform="translate(212,212)">
-              <circle cx="0" cy="0" r="3"/><circle cx="8" cy="0" r="3"/><path d="M0 0 L4 -4 L8 0 M4 -4 L4 0"/>
-            </g>
+            <g transform="translate(152,152)"><circle cx="0" cy="0" r="3"/><circle cx="8" cy="0" r="3"/><path d="M0 0 L4 -4 L8 0 M4 -4 L4 0"/></g>
+            <g transform="translate(188,188)"><circle cx="0" cy="0" r="3"/><circle cx="8" cy="0" r="3"/><path d="M0 0 L4 -4 L8 0 M4 -4 L4 0"/></g>
+            <g transform="translate(30,145)"><circle cx="0" cy="0" r="3"/><circle cx="8" cy="0" r="3"/><path d="M0 0 L4 -4 L8 0 M4 -4 L4 0"/></g>
+            <g transform="translate(145,30) rotate(90)"><circle cx="0" cy="0" r="3"/><circle cx="8" cy="0" r="3"/><path d="M0 0 L4 -4 L8 0 M4 -4 L4 0"/></g>
+          </g>
+          <!-- zebra crossings (4 arms) -->
+          <g fill="#fff">
+            <rect x="154" y="126" width="32" height="4"/>
+            <rect x="154" y="132" width="32" height="4"/>
+            <rect x="154" y="208" width="32" height="4"/>
+            <rect x="154" y="214" width="32" height="4"/>
+            <rect x="126" y="154" width="4" height="32"/>
+            <rect x="132" y="154" width="4" height="32"/>
+            <rect x="208" y="154" width="4" height="32"/>
+            <rect x="214" y="154" width="4" height="32"/>
           </g>
           <!-- cars circulating -->
           <g>
-            <rect x="148" y="128" width="20" height="10" rx="2" fill="#7c8b98"/>
-            <rect x="132" y="178" width="10" height="20" rx="2" fill="#5b6b78"/>
+            <rect x="160" y="156" width="12" height="6" rx="2" fill="#7c8b98"/>
+            <rect x="176" y="166" width="6" height="12" rx="2" fill="#5b6b78"/>
           </g>
         </svg>
         <p class="text-white/55 text-sm leading-relaxed mt-4" x-text="L.acap"></p>
