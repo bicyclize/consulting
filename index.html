@@ -109,7 +109,6 @@
       stats:[{n:'10+',l:'Projects delivered'},{n:'6',l:'Budapest districts'},{n:'5+',l:'Years experience'},{n:'EU',l:'Funded projects'}],
       sl5:'Get in touch', sh5:'Start a conversation.',
       ss5:'Tell us about your project. We respond within 5 working days.',
-      flabel:'Name', elabel:'Email', mlabel:'Message', send:'Send message',
       addr:'Budapest, Andrássy út 79, 1062 Hungary', eml:'info@bicyclize.com',
       ptitle:'Privacy Policy', ttitle:'Terms of Service', ftag:'Urban Mobility Consultancy',
       label:'Liveable Main Streets · the method',
@@ -188,7 +187,6 @@
       stats:[{n:'10+',l:'Leszállított projekt'},{n:'6',l:'Budapesti kerület'},{n:'5+',l:'Év tapasztalat'},{n:'EU',l:'Finanszírozott projektek'}],
       sl5:'Kapcsolat', sh5:'Kezdjünk egy párbeszédet.',
       ss5:'Mesélje el projektjét. 5 munkanapon belül válaszolunk.',
-      flabel:'Neve', elabel:'E-mail cím', mlabel:'Üzenet', send:'Üzenet küldése',
       addr:'Budapest, Andrássy út 79, 1062', eml:'info@bicyclize.com',
       ptitle:'Adatvédelmi Irányelvek', ttitle:'Felhasználási Feltételek', ftag:'Városi Mobilitás Tanácsadó',
       label:'Élhető Főutak · a módszer',
@@ -972,21 +970,16 @@
       <div id="map" style="height:400px;border-radius:1rem;box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1)"></div>
     </div>
     <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-left">
-      <form action="https://formspree.io/f/info@bicyclize.com" method="POST" class="space-y-5">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2" x-text="L.flabel"></label>
-          <input type="text" name="name" :placeholder="L.flabel" required>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2" x-text="L.elabel"></label>
-          <input type="email" name="email" :placeholder="L.elabel" required>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2" x-text="L.mlabel"></label>
-          <textarea name="message" rows="5" :placeholder="lang==='en'?'Tell us about your project or challenge...':'Mesélje el projektjét vagy kihívását...'" required style="resize:vertical"></textarea>
-        </div>
-        <button type="submit" class="bg w-full justify-center" x-text="L.send"></button>
-      </form>
+      <div class="text-center py-6">
+        <div class="w-16 h-16 rounded-2xl bg-forest-500/10 flex items-center justify-center mx-auto mb-5 text-3xl">✉️</div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2" x-text="lang==='en'?'Write to us directly':'Írjon nekünk közvetlenül'"></h3>
+        <p class="text-gray-500 text-sm mb-6" x-text="lang==='en'?'No forms — just send us an email. We read everything and respond within 5 working days.':'Nincs űrlap — csak írjon egy e-mailt. Mindent elolvasunk, és 5 munkanapon belül válaszolunk.'"></p>
+        <a :href="'mailto:'+L.eml"
+           class="bg text-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <span x-text="L.eml"></span>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -1036,7 +1029,7 @@
       <div>
         <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Data we collect':'Gyűjtött adatok'"></h2>
         <ul class="list-disc pl-5 space-y-1">
-          <li x-text="lang==='en'?'Contact form: name, email, message. Used solely to respond to your enquiry.':'Kapcsolatfelvételi űrlap: név, e-mail cím, üzenet. Kizárólag az érdeklődés megválaszolására használjuk.'"></li>
+          <li x-text="lang==='en'?'Email: your email address and any content you send us. Used solely to respond to your enquiry.':'E-mail: az Ön e-mail címe és a küldött tartalom. Kizárólag az érdeklődés megválaszolására használjuk.'"></li>
           <li x-text="lang==='en'?'Newsletter: email address for updates (with your consent).':'Hírlevél: e-mail cím értesítésekhez (beleegyezésével).'"></li>
           <li x-text="lang==='en'?'Analytics: anonymised page visit data via privacy-respecting analytics.':'Analitika: anonimizált látogatási adatok adatvédelmet tiszteletben tartó analitikai eszközzel.'"></li>
         </ul>
