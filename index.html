@@ -137,8 +137,8 @@
       proofTitle:'What the data says', proofNote:'Methodologically grounded, cited to source.',
       p1:'−44%', p1l:'injury crashes (SWOV)',
       p2:'−20–29%', p2l:'emissions',
-      p3:'15–25M Ft', p3l:'tactical roundabout, once',
-      p4:'1,351 km', p4l:'2×2+ urban arterials in Hungary',
+      p3:'0.5% → 15%', p3l:'cycling mode share, Seville (4 yrs)',
+      p4:'32 → 8', p4l:'vehicle conflict points (roundabout vs signalised)',
       cta:'Got a main street? Let\u2019s talk.',
       cta2:'See the method applied to a real junction'
     },
@@ -216,8 +216,8 @@
       proofTitle:'Amit az adatok mutatnak', proofNote:'Módszertanilag megalapozott, forrással hivatkozva.',
       p1:'−44%', p1l:'sérüléses baleset (SWOV)',
       p2:'−20–29%', p2l:'kibocsátás',
-      p3:'15–25M Ft', p3l:'taktikai körforgalom, egyszer',
-      p4:'1 351 km', p4l:'2×2+ belterületi főút Magyarországon',
+      p3:'0,5% → 15%', p3l:'kerékpáros módrészarány, Sevilla (4 év)',
+      p4:'32 → 8', p4l:'konfliktuspont (körforgalom vs jelzőlámpás)',
       cta:'Van egy főútja? Beszéljünk.',
       cta2:'Nézze meg a módszert egy valódi csomóponton'
     }
@@ -868,7 +868,7 @@
         <div class="w-32 h-32 rounded-full mx-auto mb-5 overflow-hidden shadow-lg border-4 border-forest-500/20">
           <img src="images/avatar-peter-biczok.png" alt="Biczók Péter" class="w-full h-full object-cover object-top">
         </div>
-        <h3 class="font-bold text-gray-900 text-lg">Biczók Péter</h3>
+        <h3 class="font-bold text-gray-900 text-lg" x-text="lang==='en'?'Péter Biczók':'Biczók Péter'"></h3>
         <p class="text-forest-600 text-sm font-semibold mb-3" x-text="lang==='en'?'Managing Director · Transport Engineer':'Ügyvezető · Közlekedésmérnök'"></p>
         <p class="text-gray-500 text-xs leading-relaxed" x-text="lang==='en'?'UCL-educated transport engineer and urban planner. Former lobbyist at the European Commission, researcher at UvA Amsterdam. Advisor to Remix and Mobycon representative for Eastern Europe.':'Közlekedésmérnök és telephelytervező. Az Európai Bizottságnál végzett lobbimunka után az amszterdami UvA-n kutatott. Mobycon és Remix tanácsadója.'"></p>
         <a href="https://www.linkedin.com/in/peterbiczok/" target="_blank" rel="noopener"
@@ -883,7 +883,7 @@
         <div class="w-32 h-32 rounded-full mx-auto mb-5 overflow-hidden shadow-lg border-4 border-forest-500/20">
           <img src="images/avatar-dalos-eszter.png" alt="Dr. Dalos Eszter" class="w-full h-full object-cover object-top">
         </div>
-        <h3 class="font-bold text-gray-900 text-lg">Dr. Dalos Eszter</h3>
+        <h3 class="font-bold text-gray-900 text-lg" x-text="lang==='en'?'Dr. Eszter Dalos':'Dr. Dalos Eszter'"></h3>
         <p class="text-forest-600 text-sm font-semibold mb-3" x-text="lang==='en'?'Managing Director · Lawyer':'Ügyvezető · Jogász'"></p>
         <p class="text-gray-500 text-xs leading-relaxed" x-text="lang==='en'?'Practice-oriented urban advocate with a focus on women in the city. After living in London, Paris, Barcelona, and Madrid, she brings an international perspective to Hungarian urban planning.':'Városfókuszú jogász, aki a városban élő nők témájára specializálódott. London, Párizs, Barcelona és Madrid után Budapestről hozza a városi tervezésbe a nemzetközi szemléletet.'"></p>
         <a href="https://www.linkedin.com/in/eszter-dalos" target="_blank" rel="noopener"
@@ -898,7 +898,7 @@
         <div class="w-32 h-32 rounded-full mx-auto mb-5 overflow-hidden shadow-lg border-4 border-forest-500/20">
           <img src="images/avatar-arva-janos.png" alt="Árva János" class="w-full h-full object-cover object-top">
         </div>
-        <h3 class="font-bold text-gray-900 text-lg">Árva János</h3>
+        <h3 class="font-bold text-gray-900 text-lg" x-text="lang==='en'?'János Árva':'Árva János'"></h3>
         <p class="text-forest-600 text-sm font-semibold mb-3" x-text="lang==='en'?'Mobility Advisor · Cycling Educator':'Mobilitási Tanácsadó · Kerékpáros Oktató'"></p>
         <p class="text-gray-500 text-xs leading-relaxed" x-text="lang==='en'?'Cycling pedagogue and urban mobility educator. Founded Hungary\'s first urban cycling school (Velo Budapest). 16 years of Budapest cycling expertise and instructor-trained in London.':'Kerékpáros pedagógus és mobilitási oktató. Megalapította Magyarország első városi kerékpáros iskoláját (Velo Budapest). 16 éves budapesti tapasztalat, londoni kerékpáros oktató végzettséggel.'"></p>
         <a href="https://www.linkedin.com/in/janos-arva/" target="_blank" rel="noopener"
@@ -906,6 +906,16 @@
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           LinkedIn
         </a>
+      </div>
+
+      <!-- Danka Levente -->
+      <div class="ch text-center" data-aos="fade-up" data-aos-delay="240">
+        <div class="w-32 h-32 rounded-full mx-auto mb-5 overflow-hidden shadow-lg border-4 border-forest-500/20">
+          <img src="images/avatar-danka-levente.png" alt="Levente Danka" class="w-full h-full object-cover object-top">
+        </div>
+        <h3 class="font-bold text-gray-900 text-lg" x-text="lang==='en'?'Levente Danka':'Danka Levente'"></h3>
+        <p class="text-forest-600 text-sm font-semibold mb-3" x-text="lang==='en'?'Project Coordinator':'Projektkoordinátor'"></p>
+        <p class="text-gray-500 text-xs leading-relaxed" x-text="lang==='en'?'Coordinates projects end-to-end — from first client contact through delivery and monitoring — keeping timelines, budgets and stakeholders aligned.':'Projektek teljes körű koordinálása — az első kapcsolatfelvételtől a leszállításig és a monitoringig — határidők, költségvetés és érintettek összehangolásával.'"></p>
       </div>
 
     </div>
