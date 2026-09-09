@@ -23,6 +23,15 @@
     }}
   }
 </script>
+<script>
+  // Land every plain visit at the very top: browsers otherwise restore the
+  // previous scroll position for this URL (so a long one-pager can reopen at
+  // the footer). Deep links with #anchor (e.g. #contact) are left untouched.
+  try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+  window.addEventListener('load', function () {
+    if (!location.hash) window.scrollTo(0, 0);
+  });
+</script>
 <style>
   [x-cloak]{display:none!important}
   html{scroll-behavior:smooth}
