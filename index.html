@@ -197,7 +197,7 @@
       gcaps:['Hálózati összefüggőség-elemzés','Geografikusan súlyozott regresszió (GWR)','Kerékpározási potenciál és kereslet modellezés','Vonzáskörzet és elérhetőségi térképezés','Forgalomáramlás modellezés és szimuláció','Egyedi interaktív webtérképek'],
       stats:[{n:'10+',l:'Leszállított projekt'},{n:'6',l:'Budapesti kerület'},{n:'5+',l:'Év tapasztalat'},{n:'EU',l:'Finanszírozott projektek'}],
       sl5:'Kapcsolat', sh5:'Kezdjünk egy párbeszédet.',
-      ss5:'Mesélje el projektjét. 5 munkanapon belül válaszolunk.',
+      ss5:'Meséld el a projekted! 5 munkanapon belül válaszolunk.',
       addr:'Budapest, Andrássy út 79, 1062', eml:'info@bicyclize.com',
       ptitle:'Adatvédelmi Irányelvek', ttitle:'Felhasználási Feltételek', ftag:'Városi Mobilitás Tanácsadó',
       label:'Élhető Főutak · a módszer',
@@ -226,8 +226,8 @@
       p2:'−20–29%', p2l:'kibocsátás',
       p3:'0,5% → 15%', p3l:'kerékpáros módrészarány, Sevilla (4 év)',
       p4:'32 → 8', p4l:'konfliktuspont (jelzőlámpás vs körforgalom)',
-      cta:'Van egy főútja? Beszéljünk.',
-      cta2:'Nézze meg a módszert egy valódi csomóponton'
+      cta:'Van egy főutad? Beszéljünk.',
+      cta2:'Nézd meg a módszert egy valódi csomóponton'
     }
   },
   get L(){ return this.D[this.lang] }
@@ -1380,8 +1380,8 @@
     <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-left">
       <div class="text-center py-6">
         <div class="w-16 h-16 rounded-2xl bg-forest-500/10 flex items-center justify-center mx-auto mb-5 text-3xl">✉️</div>
-        <h3 class="text-xl font-bold text-gray-900 mb-2" x-text="lang==='en'?'Write to us directly':'Írjon nekünk közvetlenül'"></h3>
-        <p class="text-gray-500 text-sm mb-6" x-text="lang==='en'?'No forms — just send us an email. We read everything and respond within 5 working days.':'Nincs űrlap — csak írjon egy e-mailt. Mindent elolvasunk, és 5 munkanapon belül válaszolunk.'"></p>
+        <h3 class="text-xl font-bold text-gray-900 mb-2" x-text="lang==='en'?'Write to us directly':'Írj nekünk közvetlenül'"></h3>
+        <p class="text-gray-500 text-sm mb-6" x-text="lang==='en'?'No forms — just send us an email. We read everything and respond within 5 working days.':'Nincs űrlap — csak írj egy e-mailt. Mindent elolvasunk, és 5 munkanapon belül válaszolunk.'"></p>
         <a :href="'mailto:'+L.eml"
            class="bg text-lg">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -1437,18 +1437,18 @@
       <div>
         <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Data we collect':'Gyűjtött adatok'"></h2>
         <ul class="list-disc pl-5 space-y-1">
-          <li x-text="lang==='en'?'Email: your email address and any content you send us. Used solely to respond to your enquiry.':'E-mail: az Ön e-mail címe és a küldött tartalom. Kizárólag az érdeklődés megválaszolására használjuk.'"></li>
-          <li x-text="lang==='en'?'Newsletter: email address for updates (with your consent).':'Hírlevél: e-mail cím értesítésekhez (beleegyezésével).'"></li>
+          <li x-text="lang==='en'?'Email: your email address and any content you send us. Used solely to respond to your enquiry.':'E-mail: az e-mail címed és az elküldött tartalom. Kizárólag az érdeklődésed megválaszolására használjuk.'"></li>
+          <li x-text="lang==='en'?'Newsletter: email address for updates (with your consent).':'Hírlevél: e-mail cím az értesítésekhez (a beleegyezéseddel).'"></li>
           <li x-text="lang==='en'?'Analytics: anonymised page visit data via privacy-respecting analytics.':'Analitika: anonimizált látogatási adatok adatvédelmet tiszteletben tartó analitikai eszközzel.'"></li>
         </ul>
       </div>
       <div>
-        <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Your rights':'Az Ön jogai'"></h2>
-        <p x-text="lang==='en'?'Under GDPR you have the right to access, rectify, erase, and object to processing of your personal data. Contact us at info@bicyclize.com.':'A GDPR alapján Ön jogosult hozzáférni, helyesbíteni, töröltetni és tiltakozni a személyes adatai kezelése ellen. Lépjen kapcsolatba velünk: info@bicyclize.com.'"></p>
+        <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Your rights':'A jogaid'"></h2>
+        <p x-text="lang==='en'?'Under GDPR you have the right to access, rectify, erase, and object to processing of your personal data. Contact us at info@bicyclize.com.':'A GDPR alapján jogod van hozzáférni, helyesbíteni, töröltetni és tiltakozni a személyes adataid kezelése ellen. Lépj kapcsolatba velünk: info@bicyclize.com.'"></p>
       </div>
       <div>
         <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Data storage':'Adattárolás'"></h2>
-        <p x-text="lang==='en'?'All data is stored on EU-based servers. We do not sell or share personal data with third parties except where required by law.':'Minden adat EU-alapú szervereken tárolódik. Nem értékesítjük vagy adjuk át személyes adatait harmadik feleknek, kivéve jogszabályi kötelezettség esetén.'"></p>
+        <p x-text="lang==='en'?'All data is stored on EU-based servers. We do not sell or share personal data with third parties except where required by law.':'Minden adat EU-alapú szervereken tárolódik. Nem értékesítjük vagy adjuk át személyes adataidat harmadik feleknek, kivéve jogszabályi kötelezettség esetén.'"></p>
       </div>
     </div>
   </div>
@@ -1460,7 +1460,7 @@
     <h1 x-text="L.ttitle" class="text-3xl font-extrabold text-gray-900 mb-2"></h1>
     <p class="text-gray-500 text-sm mb-8" x-text="lang==='en'?'Last updated: March 2026':'Utoljára módosítva: 2026. március'"></p>
     <div class="space-y-6 text-gray-600 text-sm leading-relaxed">
-      <p x-text="lang==='en'?'This website is operated by Város és Mobilitás Intézet Non-Profit Kft. (registered in Hungary, Andrássy út 79, Budapest 1062). By using this website you agree to these terms.':'Ezt a weboldalt a Város és Mobilitás Intézet Non-Profit Kft. (magyarországi bejegyzésű, 1062 Budapest, Andrássy út 79) üzemelteti. Az oldal használatával elfogadja ezeket a feltételeket.'"></p>
+      <p x-text="lang==='en'?'This website is operated by Város és Mobilitás Intézet Non-Profit Kft. (registered in Hungary, Andrássy út 79, Budapest 1062). By using this website you agree to these terms.':'Ezt a weboldalt a Város és Mobilitás Intézet Non-Profit Kft. (magyarországi bejegyzésű, 1062 Budapest, Andrássy út 79) üzemelteti. Az oldal használatával elfogadod ezeket a feltételeket.'"></p>
       <div>
         <h2 class="text-lg font-bold text-gray-900 mb-2" x-text="lang==='en'?'Intellectual property':'Szellemi tulajdon'"></h2>
         <p x-text="lang==='en'?'All content on this website — including text, images, maps, and designs — is the property of Város és Mobilitás Intézet Non-Profit Kft. or its licensors. Reproduction without written permission is prohibited.':'Az ezen a weboldalon található összes tartalom — beleértve a szövegeket, képeket, térképeket és terveket — a Város és Mobilitás Intézet Non-Profit Kft. vagy licencadóinak tulajdona. Írásbeli engedély nélküli reprodukció tilos.'"></p>
