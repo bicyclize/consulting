@@ -24,13 +24,15 @@
   }
 </script>
 <script>
-  // Land every plain visit at the very top: browsers otherwise restore the
-  // previous scroll position for this URL (so a long one-pager can reopen at
-  // the footer). Deep links with #anchor (e.g. #contact) are left untouched.
+  // Land every visit at the very top. Browsers otherwise restore the previous
+  // scroll position for this URL (a long one-pager can reopen at the footer),
+  // including on back-forward-cache restores where 'load' does not fire, so we
+  // use 'pageshow' (fires on every load/restore). Deep links with #anchor
+  // (e.g. #contact) are left untouched so they still jump to their section.
   try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
-  window.addEventListener('load', function () {
-    if (!location.hash) window.scrollTo(0, 0);
-  });
+  function snapTop() { if (!location.hash) window.scrollTo(0, 0); }
+  window.addEventListener('load', snapTop);
+  window.addEventListener('pageshow', snapTop);
 </script>
 <style>
   [x-cloak]{display:none!important}
