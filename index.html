@@ -151,7 +151,16 @@
       p3:'0.5% → 15%', p3l:'cycling mode share, Seville (4 yrs)',
       p4:'32 → 8', p4l:'vehicle conflict points (signalised vs roundabout)',
       cta:'Got a main street? Let\u2019s talk.',
-      cta2:'See the method applied to a real junction'
+      cta2:'See the method applied to a real junction',
+      whyLabel:'Why Bicyclize',
+      whyTitle:'Dutch design standards, grounded in local reality.',
+      whySub:'We bridge world-class Dutch design and the realities of the local street — so the result is buildable, not just beautiful.',
+      why:[
+        {e:'🇳🇱',t:'Dutch standards, fully explained',d:'We design to Dutch standards — and show you why each detail works: how it shapes behaviour and psychology, not just what to build.'},
+        {e:'🏙️',t:'Local fluency',d:'We know the local reality — municipal politics, engineer culture, and how local engineers think and where they get stuck.'},
+        {e:'⚡',t:'Cost-efficient by structure',d:'Local overhead, Western-agency quality. Dutch-level design without the day rates of a Dutch or Danish firm.'},
+        {e:'📊',t:'Data analysis in-house',d:'We do the technical analysis ourselves — on your local data, not generic benchmarks.'}
+      ]
     },
     hu: {
       nav:['Szolgáltatások','Módszer','Megközelítés','Projektek','Eszközök','Csapat','Kapcsolat'],
@@ -229,7 +238,16 @@
       p3:'0,5% → 15%', p3l:'kerékpáros módrészarány, Sevilla (4 év)',
       p4:'32 → 8', p4l:'konfliktuspont (jelzőlámpás vs körforgalom)',
       cta:'Van egy főutad? Beszéljünk.',
-      cta2:'Nézd meg a módszert egy valódi csomóponton'
+      cta2:'Nézd meg a módszert egy valódi csomóponton',
+      whyLabel:'Miért a Bicyclize',
+      whyTitle:'Holland tervezési színvonal, helyi valóságban.',
+      whySub:'Összekötjük a világszínvonalú holland tervezést a helyi utca valóságával — hogy az eredmény ne csak szép, hanem megépíthető is legyen.',
+      why:[
+        {e:'🇳🇱',t:'Holland színvonal, elmagyarázva',d:'Holland színvonalon tervezünk — és elmagyarázzuk, miért működik minden részlet: hogyan formálja a viselkedést és a pszichológiát, nem csak azt, hogy mit építsünk.'},
+        {e:'🏙️',t:'Helyi ismeret',d:'Ismerjük a helyi valóságot — a települési politikát, a mérnöki kultúrát, és azt, hogyan gondolkodnak a helyi mérnökök, és hol akadnak el.'},
+        {e:'⚡',t:'Költséghatékony felépítés',d:'Helyi rezsivel, nyugat-európai minőségben dolgozunk. Holland színvonalú tervezés a holland vagy dán cégek napidíjai nélkül.'},
+        {e:'📊',t:'Adatelemzés házon belül',d:'A technikai elemzést magunk végezzük — a te helyi adataidon, nem általános benchmarkokon.'}
+      ]
     }
   },
   get L(){ return this.D[this.lang] }
@@ -302,6 +320,26 @@
   <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/30">
     <span class="text-xs tracking-widest uppercase">Scroll</span>
     <svg class="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+  </div>
+</section>
+
+<!-- ═══ WHY BICYCLIZE ═══ -->
+<section id="why" class="py-24 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-5">
+    <div class="text-center mb-14" data-aos="fade-up">
+      <span class="sl" x-text="L.whyLabel"></span>
+      <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-5 max-w-3xl mx-auto leading-tight" x-text="L.whyTitle"></h2>
+      <p class="text-gray-500 text-lg max-w-2xl mx-auto" x-text="L.whySub"></p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <template x-for="(w,i) in L.why" :key="i">
+        <div class="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm" data-aos="fade-up" :data-aos-delay="i*70">
+          <div class="text-3xl mb-4" x-text="w.e"></div>
+          <h3 class="text-base font-bold text-gray-900 mb-2" x-text="w.t"></h3>
+          <p class="text-gray-500 text-sm leading-relaxed" x-text="w.d"></p>
+        </div>
+      </template>
+    </div>
   </div>
 </section>
 
