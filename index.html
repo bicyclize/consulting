@@ -1207,9 +1207,21 @@
         </div>
       </template>
     </div>
-    <div class="mt-14 grid md:grid-cols-2 gap-6" data-aos="fade-up">
-      <div class="rounded-2xl iz h-64 shadow-lg"><img src="images/budapest-cycling.jpg" alt="Cycling in Budapest" class="rounded-2xl"></div>
-      <div class="rounded-2xl iz h-64 shadow-lg"><img src="images/public-consultation-2.jpg" alt="Community consultation" class="rounded-2xl"></div>
+    <!-- Shiftmap callout -->
+    <div class="mt-14 rounded-2xl overflow-hidden grid md:grid-cols-2 bg-white border border-gray-100 shadow-sm ch" data-aos="fade-up">
+      <a :href="'mailto:'+L.eml+'?subject='+encodeURIComponent(lang==='en'?'Shiftmap access request':'Shiftmap hozzáférés kérés')" class="iz h-64 md:h-auto" aria-label="Request Shiftmap access">
+        <img src="images/shiftmap-teaser.jpg" alt="Shiftmap — Budapest cycling potential" class="w-full h-full object-cover">
+      </a>
+      <div class="p-8 flex flex-col justify-center">
+        <span class="sl">Shiftmap</span>
+        <h3 class="text-2xl font-extrabold text-gray-900 mb-4" x-text="L.shiftmapTitle"></h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-6" x-text="L.shiftmapDesc"></p>
+        <div class="flex items-center gap-10 mb-7">
+          <div><div class="text-3xl font-extrabold text-forest-600" x-text="L.shiftmapStat1n"></div><div class="text-gray-500 text-xs mt-1" x-text="L.shiftmapStat1l"></div></div>
+          <div><div class="text-3xl font-extrabold text-forest-600" x-text="L.shiftmapStat2n"></div><div class="text-gray-500 text-xs mt-1" x-text="L.shiftmapStat2l"></div></div>
+        </div>
+        <a :href="'mailto:'+L.eml+'?subject='+encodeURIComponent(lang==='en'?'Shiftmap access request':'Shiftmap hozzáférés kérés')" class="bg self-start" x-text="L.shiftmapCTA"></a>
+      </div>
     </div>
   </div>
 </section>
@@ -1303,23 +1315,6 @@
         <h3 class="text-2xl font-extrabold text-white mb-4" x-text="lang==='en'?'Safe streets around every school.':'Biztonságos utcák minden iskola körül.'"></h3>
         <p class="text-white/65 text-sm leading-relaxed mb-6" x-text="lang==='en'?'Our school street programmes combine traffic restrictions, cycling training, air quality measurement, and community design workshops. Temporary pilots that can become permanent transformations.':'Iskola utca programjaink forgalomkorlátozást, kerékpáros képzést, levegőminőség-mérést és közösségi tervezési workshopokat kombinálnak. Ideiglenes pilotkísérletekből tartós átalakulások lesznek.'"></p>
         <a href="#contact" class="bg self-start" x-text="lang==='en'?'Discuss your school street':'Beszéljük meg'"></a>
-      </div>
-    </div>
-
-    <!-- Shiftmap callout -->
-    <div class="mt-8 rounded-2xl overflow-hidden grid md:grid-cols-2 glass ch" data-aos="fade-up">
-      <a :href="'mailto:'+L.eml+'?subject='+encodeURIComponent(lang==='en'?'Shiftmap access request':'Shiftmap hozzáférés kérés')" class="iz h-64 md:h-auto" aria-label="Request Shiftmap access">
-        <img src="images/shiftmap-teaser.jpg" alt="Shiftmap — Budapest cycling potential" class="w-full h-full object-cover">
-      </a>
-      <div class="p-8 flex flex-col justify-center">
-        <span class="sl">Shiftmap</span>
-        <h3 class="text-2xl font-extrabold text-white mb-4" x-text="L.shiftmapTitle"></h3>
-        <p class="text-white/65 text-sm leading-relaxed mb-6" x-text="L.shiftmapDesc"></p>
-        <div class="flex items-center gap-10 mb-7">
-          <div><div class="text-3xl font-extrabold gt" x-text="L.shiftmapStat1n"></div><div class="text-white/55 text-xs mt-1" x-text="L.shiftmapStat1l"></div></div>
-          <div><div class="text-3xl font-extrabold gt" x-text="L.shiftmapStat2n"></div><div class="text-white/55 text-xs mt-1" x-text="L.shiftmapStat2l"></div></div>
-        </div>
-        <a :href="'mailto:'+L.eml+'?subject='+encodeURIComponent(lang==='en'?'Shiftmap access request':'Shiftmap hozzáférés kérés')" class="bg self-start" x-text="L.shiftmapCTA"></a>
       </div>
     </div>
   </div>
