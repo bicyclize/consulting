@@ -160,7 +160,12 @@
         {e:'🏙️',t:'Local fluency',d:'We know the local reality — municipal politics, engineer culture, and how local engineers think and where they get stuck.'},
         {e:'⚡',t:'Cost-efficient by structure',d:'Local overhead, Western-agency quality. Dutch-level design without the day rates of a Dutch or Danish firm.'},
         {e:'📊',t:'Data analysis in-house',d:'We do the technical analysis ourselves — on your local data, not generic benchmarks.'}
-      ]
+      ],
+      shiftmapTitle:'See where cycling works.',
+      shiftmapDesc:'Our open trip-analysis tool routes every trip on the real road network and classifies each as potential bike, bike+train, or car — building the case for cycling from your own movement data.',
+      shiftmapStat1n:'391,171', shiftmapStat1l:'trips analysed',
+      shiftmapStat2n:'39.2%', shiftmapStat2l:'could be a bike',
+      shiftmapCTA:'Request access'
     },
     hu: {
       nav:['Szolgáltatások','Módszer','Megközelítés','Projektek','Eszközök','Csapat','Kapcsolat'],
@@ -247,7 +252,12 @@
         {e:'🏙️',t:'Helyi ismeret',d:'Ismerjük a helyi valóságot — a települési politikát, a mérnöki kultúrát, és azt, hogyan gondolkodnak a helyi mérnökök, és hol akadnak el.'},
         {e:'⚡',t:'Költséghatékony felépítés',d:'Helyi rezsivel, nyugat-európai minőségben dolgozunk. Holland színvonalú tervezés a holland vagy dán cégek napidíjai nélkül.'},
         {e:'📊',t:'Adatelemzés házon belül',d:'A technikai elemzést magunk végezzük — a te helyi adataidon, nem általános benchmarkokon.'}
-      ]
+      ],
+      shiftmapTitle:'Lásd, hol működik a kerékpározás.',
+      shiftmapDesc:'Nyílt utazás-elemző eszközünk minden utazást a valós hálózaton vezet végig, és besorolja: lehetne-e kerékpár, kerékpár+vonat vagy autó — így a kerékpározás melletti érvet a te városod saját mozgásadataiból alapozzuk meg.',
+      shiftmapStat1n:'391 171', shiftmapStat1l:'elemzett utazás',
+      shiftmapStat2n:'39,2%', shiftmapStat2l:'kerékpározható',
+      shiftmapCTA:'Hozzáférést kérek'
     }
   },
   get L(){ return this.D[this.lang] }
@@ -1293,6 +1303,23 @@
         <h3 class="text-2xl font-extrabold text-white mb-4" x-text="lang==='en'?'Safe streets around every school.':'Biztonságos utcák minden iskola körül.'"></h3>
         <p class="text-white/65 text-sm leading-relaxed mb-6" x-text="lang==='en'?'Our school street programmes combine traffic restrictions, cycling training, air quality measurement, and community design workshops. Temporary pilots that can become permanent transformations.':'Iskola utca programjaink forgalomkorlátozást, kerékpáros képzést, levegőminőség-mérést és közösségi tervezési workshopokat kombinálnak. Ideiglenes pilotkísérletekből tartós átalakulások lesznek.'"></p>
         <a href="#contact" class="bg self-start" x-text="lang==='en'?'Discuss your school street':'Beszéljük meg'"></a>
+      </div>
+    </div>
+
+    <!-- Shiftmap callout -->
+    <div class="mt-8 rounded-2xl overflow-hidden grid md:grid-cols-2 glass ch" data-aos="fade-up">
+      <a :href="'mailto:'+L.eml+'?subject='+encodeURIComponent(lang==='en'?'Shiftmap access request':'Shiftmap hozzáférés kérés')" class="iz h-64 md:h-auto" aria-label="Request Shiftmap access">
+        <img src="images/shiftmap-teaser.jpg" alt="Shiftmap — Budapest cycling potential" class="w-full h-full object-cover">
+      </a>
+      <div class="p-8 flex flex-col justify-center">
+        <span class="sl">Shiftmap</span>
+        <h3 class="text-2xl font-extrabold text-white mb-4" x-text="L.shiftmapTitle"></h3>
+        <p class="text-white/65 text-sm leading-relaxed mb-6" x-text="L.shiftmapDesc"></p>
+        <div class="flex items-center gap-10 mb-7">
+          <div><div class="text-3xl font-extrabold gt" x-text="L.shiftmapStat1n"></div><div class="text-white/55 text-xs mt-1" x-text="L.shiftmapStat1l"></div></div>
+          <div><div class="text-3xl font-extrabold gt" x-text="L.shiftmapStat2n"></div><div class="text-white/55 text-xs mt-1" x-text="L.shiftmapStat2l"></div></div>
+        </div>
+        <a :href="'mailto:'+L.eml+'?subject='+encodeURIComponent(lang==='en'?'Shiftmap access request':'Shiftmap hozzáférés kérés')" class="bg self-start" x-text="L.shiftmapCTA"></a>
       </div>
     </div>
   </div>
